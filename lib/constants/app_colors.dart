@@ -82,4 +82,12 @@ class AppColors {
   static const Color lightBottomNavActive = Color(
     0xFFF5A623,
   ); // Active nav color matches primary (#F5A623)
+
+  // Admin/status tags and misc admin UI colors
+  static const Color tagNew = Color(0xFF1CA7B3); // teal for "New"
+  static const Color tagPreparing = Color(
+    0xFFF8C35A,
+  ); // reuse lightOffer for preparing
+  static const Color tagDelivered = Color(0xFF2FB25A); // green for delivered
+  static const Color adminDivider = Color(0xFF4A5560);
 }

@@ -4,6 +4,7 @@ import '../../services/theme_service.dart';
 import 'forgot_password_screen.dart';
 import 'sign_up_screen.dart';
 import 'home_screen.dart';
+import 'admin_order_management_screen.dart';
 import '../widgets/primary_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,6 +20,14 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
 
   void _onLogin() {
+    final name = _usernameController.text.trim();
+    if (name.toLowerCase() == 'admin') {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const AdminOrderManagementScreen()),
+      );
+      return;
+    }
+
     // navigate to the home page (UI-only)
     Navigator.of(
       context,
