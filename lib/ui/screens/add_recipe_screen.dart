@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/app_strings.dart';
 import '../../constants/app_colors.dart';
+import '../../services/theme_service.dart';
 import '../widgets/image_picker_ui.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/success_message.dart';
@@ -22,6 +23,31 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
   String? _category;
   bool _showSuccess = false;
   bool _hasImage = false;
+
+  String _appearance = 'Dark';
+
+  @override
+  void initState() {
+    super.initState();
+    final mode = ThemeService.current;
+    _appearance = mode == ThemeMode.dark
+        ? 'Dark'
+        : mode == ThemeMode.light
+        ? 'Light'
+        : 'System';
+    ThemeService.themeMode.addListener(_onThemeModeChanged);
+  }
+
+  void _onThemeModeChanged() {
+    final mode = ThemeService.current;
+    setState(() {
+      _appearance = mode == ThemeMode.dark
+          ? 'Dark'
+          : mode == ThemeMode.light
+          ? 'Light'
+          : 'System';
+    });
+  }
 
   final List<String> _modes = ['Veg', 'Non-Veg', 'Vegan'];
   final List<String> _categories = [
@@ -55,6 +81,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
   @override
   void dispose() {
+    ThemeService.themeMode.removeListener(_onThemeModeChanged);
     _nameController.dispose();
     _descriptionController.dispose();
     _priceController.dispose();
@@ -63,15 +90,34 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bg = isDark
+        ? AppColors.screenBackground
+        : AppColors.lightScreenBackground;
+    final inputBg = isDark
+        ? AppColors.inputBackground
+        : AppColors.lightInputBackground;
+    final primaryText = isDark
+        ? AppColors.primaryText
+        : AppColors.lightPrimaryText;
+    final secondaryText = isDark
+        ? AppColors.secondaryText
+        : AppColors.lightSecondaryText;
+    final borderDefault = isDark
+        ? AppColors.borderDefault
+        : AppColors.lightBorderDefault;
+    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
+    final buttonText = isDark
+        ? AppColors.buttonText
+        : AppColors.lightButtonText;
+    final appBarBg = isDark ? AppColors.appBarBg : bg;
+
     return Scaffold(
-      backgroundColor: AppColors.screenBackground,
+      backgroundColor: bg,
       appBar: AppBar(
-        backgroundColor: AppColors.appBarBg,
-        title: const Text(
-          'Add New Recipe',
-          style: TextStyle(color: AppColors.appBarText),
-        ),
-        leading: const BackButton(color: AppColors.appBarIcon),
+        backgroundColor: appBarBg,
+        title: Text('Add New Recipe', style: TextStyle(color: primaryText)),
+        leading: BackButton(color: primaryText),
         elevation: 0,
       ),
       body: SafeArea(
@@ -90,9 +136,42 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        // Appearance selector
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Appearance',
+                                style: TextStyle(
+                                  color: primaryText,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              const Spacer(),
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: isDark
+                                      ? AppColors.cardDark
+                                      : AppColors.lightCard,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  children: [
+                                    _appearanceOption('Light'),
+                                    _appearanceOption('Dark'),
+                                    _appearanceOption('System'),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
                         // main card
                         Card(
-                          color: AppColors.inputBackground,
+                          color: inputBg,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -105,24 +184,18 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                 // Food Name
                                 TextFormField(
                                   controller: _nameController,
-                                  style: const TextStyle(
-                                    color: AppColors.primaryText,
-                                  ),
+                                  style: TextStyle(color: primaryText),
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: AppColors.inputBackground,
+                                    fillColor: inputBg,
                                     labelText: 'Food Name',
-                                    labelStyle: const TextStyle(
-                                      color: AppColors.primaryText,
-                                    ),
+                                    labelStyle: TextStyle(color: primaryText),
                                     hintText: 'e.g. Classic Margherita Pizza',
-                                    hintStyle: const TextStyle(
-                                      color: AppColors.secondaryText,
-                                    ),
+                                    hintStyle: TextStyle(color: secondaryText),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.borderDefault,
+                                      borderSide: BorderSide(
+                                        color: borderDefault,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -142,25 +215,19 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                 // Description
                                 TextFormField(
                                   controller: _descriptionController,
-                                  style: const TextStyle(
-                                    color: AppColors.primaryText,
-                                  ),
+                                  style: TextStyle(color: primaryText),
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: AppColors.inputBackground,
+                                    fillColor: inputBg,
                                     labelText: 'Description (Optional)',
-                                    labelStyle: const TextStyle(
-                                      color: AppColors.primaryText,
-                                    ),
+                                    labelStyle: TextStyle(color: primaryText),
                                     hintText:
                                         'e.g. Fresh basil, mozzarella, and a rich tomato sauce...',
-                                    hintStyle: const TextStyle(
-                                      color: AppColors.secondaryText,
-                                    ),
+                                    hintStyle: TextStyle(color: secondaryText),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.borderDefault,
+                                      borderSide: BorderSide(
+                                        color: borderDefault,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -180,15 +247,13 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   initialValue: _mode,
                                   decoration: InputDecoration(
                                     labelText: 'Mode of Food',
-                                    labelStyle: const TextStyle(
-                                      color: AppColors.primaryText,
-                                    ),
+                                    labelStyle: TextStyle(color: primaryText),
                                     filled: true,
-                                    fillColor: AppColors.inputBackground,
+                                    fillColor: inputBg,
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.borderDefault,
+                                      borderSide: BorderSide(
+                                        color: borderDefault,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -198,10 +263,8 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                       ),
                                     ),
                                   ),
-                                  dropdownColor: AppColors.inputBackground,
-                                  style: const TextStyle(
-                                    color: AppColors.primaryText,
-                                  ),
+                                  dropdownColor: inputBg,
+                                  style: TextStyle(color: primaryText),
                                   items: _modes
                                       .map(
                                         (m) => DropdownMenuItem(
@@ -220,15 +283,13 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   initialValue: _category,
                                   decoration: InputDecoration(
                                     labelText: 'Food Category',
-                                    labelStyle: const TextStyle(
-                                      color: AppColors.primaryText,
-                                    ),
+                                    labelStyle: TextStyle(color: primaryText),
                                     filled: true,
-                                    fillColor: AppColors.inputBackground,
+                                    fillColor: inputBg,
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.borderDefault,
+                                      borderSide: BorderSide(
+                                        color: borderDefault,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -238,10 +299,8 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                       ),
                                     ),
                                   ),
-                                  dropdownColor: AppColors.inputBackground,
-                                  style: const TextStyle(
-                                    color: AppColors.primaryText,
-                                  ),
+                                  dropdownColor: inputBg,
+                                  style: TextStyle(color: primaryText),
                                   items: _categories
                                       .map(
                                         (c) => DropdownMenuItem(
@@ -264,20 +323,16 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   ),
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: AppColors.inputBackground,
+                                    fillColor: inputBg,
                                     labelText: 'Price / Cost',
-                                    labelStyle: const TextStyle(
-                                      color: AppColors.primaryText,
-                                    ),
+                                    labelStyle: TextStyle(color: primaryText),
                                     prefixText: '\$ ',
                                     hintText: '0.00',
-                                    hintStyle: const TextStyle(
-                                      color: AppColors.secondaryText,
-                                    ),
+                                    hintStyle: TextStyle(color: secondaryText),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.borderDefault,
+                                      borderSide: BorderSide(
+                                        color: borderDefault,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
@@ -305,9 +360,9 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                 const SizedBox(height: 16),
                                 Text(
                                   'Upload Food Image (Optional)',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    color: AppColors.primaryText,
+                                    color: primaryText,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -353,8 +408,8 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                           child: PrimaryButton(
                             label: AppStrings.addRecipe,
                             onPressed: _onAddRecipe,
-                            backgroundColor: AppColors.buttonBg,
-                            textColor: AppColors.buttonText,
+                            backgroundColor: buttonBg,
+                            textColor: buttonText,
                             shadowColor: AppColors.buttonShadow,
                           ),
                         ),
@@ -369,4 +424,30 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
       ),
     );
   }
+
+  Widget _appearanceOption(String label) => GestureDetector(
+    onTap: () {
+      setState(() => _appearance = label);
+      if (label == 'Light') ThemeService.setThemeMode(ThemeMode.light);
+      if (label == 'Dark') ThemeService.setThemeMode(ThemeMode.dark);
+      if (label == 'System') ThemeService.setThemeMode(ThemeMode.system);
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: _appearance == label ? AppColors.buttonBg : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: _appearance == label
+              ? AppColors.buttonText
+              : AppColors.secondaryText,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+  );
 }
