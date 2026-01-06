@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../constants/app_strings.dart';
-import '../../constants/app_colors.dart';
-import '../../services/theme_service.dart';
-import '../widgets/image_picker_ui.dart';
-import '../widgets/primary_button.dart';
-import '../widgets/success_message.dart';
+import '../../../constants/app_strings.dart';
+import '../../../constants/app_colors.dart';
+import '../../../services/theme_service.dart';
+import '../../widgets/image_picker_ui.dart';
+import '../../widgets/primary_button.dart';
+import '../../widgets/success_message.dart';
+import 'add_recipe_dummydata.dart';
+import 'widget/add_recipe_widget.dart';
 
 class AddRecipeScreen extends StatefulWidget {
   const AddRecipeScreen({super.key});
@@ -48,15 +50,6 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
           : 'System';
     });
   }
-
-  final List<String> _modes = ['Veg', 'Non-Veg', 'Vegan'];
-  final List<String> _categories = [
-    'Pizza',
-    'Pasta',
-    'Salad',
-    'Dessert',
-    'Beverage',
-  ];
 
   void _onUploadImage() {
     // UI-only: simulate an image being selected
@@ -137,36 +130,14 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Appearance selector
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Appearance',
-                                style: TextStyle(
-                                  color: primaryText,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                              const Spacer(),
-                              Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: isDark
-                                      ? AppColors.cardDark
-                                      : AppColors.lightCard,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  children: [
-                                    _appearanceOption('Light'),
-                                    _appearanceOption('Dark'),
-                                    _appearanceOption('System'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                        AppearanceSelector(
+                          appearance: _appearance,
+                          onAppearanceChanged: (label) {
+                            setState(() => _appearance = label);
+                            if (label == 'Light') ThemeService.setThemeMode(ThemeMode.light);
+                            if (label == 'Dark') ThemeService.setThemeMode(ThemeMode.dark);
+                            if (label == 'System') ThemeService.setThemeMode(ThemeMode.system);
+                          },
                         ),
 
                         // main card
@@ -244,7 +215,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
                                 // Mode & Category & Price & Image
                                 DropdownButtonFormField<String>(
-                                  initialValue: _mode,
+                                  value: _mode,
                                   decoration: InputDecoration(
                                     labelText: 'Mode of Food',
                                     labelStyle: TextStyle(color: primaryText),
@@ -265,7 +236,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   ),
                                   dropdownColor: inputBg,
                                   style: TextStyle(color: primaryText),
-                                  items: _modes
+                                  items: AddRecipeDummyData.modes
                                       .map(
                                         (m) => DropdownMenuItem(
                                           value: m,
@@ -280,7 +251,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                 ),
                                 const SizedBox(height: 12),
                                 DropdownButtonFormField<String>(
-                                  initialValue: _category,
+                                  value: _category,
                                   decoration: InputDecoration(
                                     labelText: 'Food Category',
                                     labelStyle: TextStyle(color: primaryText),
@@ -301,7 +272,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   ),
                                   dropdownColor: inputBg,
                                   style: TextStyle(color: primaryText),
-                                  items: _categories
+                                  items: AddRecipeDummyData.categories
                                       .map(
                                         (c) => DropdownMenuItem(
                                           value: c,
@@ -424,30 +395,4 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
       ),
     );
   }
-
-  Widget _appearanceOption(String label) => GestureDetector(
-    onTap: () {
-      setState(() => _appearance = label);
-      if (label == 'Light') ThemeService.setThemeMode(ThemeMode.light);
-      if (label == 'Dark') ThemeService.setThemeMode(ThemeMode.dark);
-      if (label == 'System') ThemeService.setThemeMode(ThemeMode.system);
-    },
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      decoration: BoxDecoration(
-        color: _appearance == label ? AppColors.buttonBg : Colors.transparent,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: _appearance == label
-              ? AppColors.buttonText
-              : AppColors.secondaryText,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    ),
-  );
 }

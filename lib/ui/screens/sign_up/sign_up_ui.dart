@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../constants/app_colors.dart';
-import '../widgets/primary_button.dart';
+import '../../../constants/app_colors.dart';
+import '../../widgets/primary_button.dart';
 
 class SignUpScreen extends StatefulWidget {
   final bool isDark;

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../constants/app_colors.dart';
-import '../../services/theme_service.dart';
-import 'forgot_password_screen.dart';
-import 'sign_up_screen.dart';
-import 'home_screen.dart';
-import 'admin_order_management_screen.dart';
-import '../widgets/primary_button.dart';
+import '../../../constants/app_colors.dart';
+import '../../../services/theme_service.dart';
+import '../forgot_password/forgot_password_ui.dart';
+import '../sign_up/sign_up_ui.dart';
+import '../home/home_ui.dart';
+import '../admin_order_management/admin_order_management_ui.dart';
+import '../../widgets/primary_button.dart';
+import 'widget/login_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -88,24 +89,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(height: 16),
 
                           // centered circular icon
-                          Center(
-                            child: Container(
-                              width: 120,
-                              height: 120,
-                              decoration: BoxDecoration(
-                                color: cardBg,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.restaurant,
-                                  size: 48,
-                                  color: isDark
-                                      ? AppColors.buttonBg
-                                      : AppColors.successIcon,
-                                ),
-                              ),
-                            ),
+                          LoginIconCircle(
+                            cardBg: cardBg,
+                            iconColor: isDark
+                                ? AppColors.buttonBg
+                                : AppColors.successIcon,
                           ),
 
                           const SizedBox(height: 28),
@@ -298,29 +286,17 @@ class _LoginScreenState extends State<LoginScreen> {
             Positioned(
               top: 12,
               right: 12,
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? AppColors.cardDark
-                      : AppColors.lightInputBackground,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: isDark
-                        ? AppColors.borderDefault
-                        : AppColors.lightBorderDefault,
-                  ),
-                ),
-                child: IconButton(
-                  onPressed: ThemeService.toggle,
-                  icon: Icon(
-                    isDark ? Icons.dark_mode : Icons.light_mode,
-                    color: isDark
-                        ? AppColors.buttonBg
-                        : AppColors.lightPrimaryText,
-                  ),
-                ),
+              child: ThemeToggleButton(
+                isDark: isDark,
+                cardBg: isDark
+                    ? AppColors.cardDark
+                    : AppColors.lightInputBackground,
+                borderColor: isDark
+                    ? AppColors.borderDefault
+                    : AppColors.lightBorderDefault,
+                iconColor: isDark
+                    ? AppColors.buttonBg
+                    : AppColors.lightPrimaryText,
               ),
             ),
           ],

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../constants/app_colors.dart';
-import 'confirm_order_dialog.dart';
-import 'track_order_screen.dart';
+import '../../../constants/app_colors.dart';
+import '../confirm_order_dialog/confirm_order_dialog_ui.dart';
+import '../track_order/track_order_ui.dart';
+import 'cart_dummydata.dart';
+import 'widget/cart_widget.dart';
 
 class CartScreen extends StatefulWidget {
   final bool isDark;
@@ -12,14 +14,10 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  List<Map<String, dynamic>> items = [
-    {'title': 'Margherita Pizza', 'price': 12.99, 'qty': 2},
-    {'title': 'Classic Burger', 'price': 8.50, 'qty': 1},
-    {'title': 'Caesar Salad', 'price': 7.00, 'qty': 1},
-  ];
+  List<Map<String, dynamic>> items = List.from(CartDummyData.initialCartItems);
 
-  final double deliveryFee = 5.0;
-  final double taxes = 3.32;
+  final double deliveryFee = CartDummyData.deliveryFee;
+  final double taxes = CartDummyData.taxes;
 
   void _changeQty(int index, int delta) {
     setState(() {
@@ -85,82 +83,39 @@ class _CartScreenState extends State<CartScreen> {
                 separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, i) {
                   final item = items[i];
-                  return Container(
-                    height: 84,
-                    decoration: BoxDecoration(
-                      color: cardBg,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 68,
-                          height: 68,
-                          decoration: BoxDecoration(
-                            color: AppColors.uploadPlaceholder,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item['title'],
-                                style: TextStyle(
-                                  color: primaryText,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                '\$${(item['price'] as double).toStringAsFixed(2)}',
-                                style: TextStyle(color: secondaryText),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            _qtyButton('-', () => _changeQty(i, -1)),
-                            const SizedBox(width: 8),
-                            Text(
-                              '${item['qty']}',
-                              style: TextStyle(color: primaryText),
-                            ),
-                            const SizedBox(width: 8),
-                            _qtyButton('+', () => _changeQty(i, 1)),
-                          ],
-                        ),
-                      ],
-                    ),
+                  return CartItemCard(
+                    title: item['title'],
+                    price: item['price'],
+                    qty: item['qty'],
+                    cardBg: cardBg,
+                    primaryText: primaryText,
+                    secondaryText: secondaryText,
+                    onIncrement: () => _changeQty(i, 1),
+                    onDecrement: () => _changeQty(i, -1),
                   );
                 },
               ),
             ),
             const SizedBox(height: 12),
-            _summaryRow(
-              'Subtotal',
-              '\$${subtotal.toStringAsFixed(2)}',
-              primaryText,
-              secondaryText,
+            SummaryRow(
+              label: 'Subtotal',
+              value: '\$${subtotal.toStringAsFixed(2)}',
+              primaryText: primaryText,
+              secondaryText: secondaryText,
             ),
             const SizedBox(height: 8),
-            _summaryRow(
-              'Delivery Fee',
-              '\$${deliveryFee.toStringAsFixed(2)}',
-              primaryText,
-              secondaryText,
+            SummaryRow(
+              label: 'Delivery Fee',
+              value: '\$${deliveryFee.toStringAsFixed(2)}',
+              primaryText: primaryText,
+              secondaryText: secondaryText,
             ),
             const SizedBox(height: 8),
-            _summaryRow(
-              'Taxes',
-              '\$${taxes.toStringAsFixed(2)}',
-              primaryText,
-              secondaryText,
+            SummaryRow(
+              label: 'Taxes',
+              value: '\$${taxes.toStringAsFixed(2)}',
+              primaryText: primaryText,
+              secondaryText: secondaryText,
             ),
             const SizedBox(height: 24),
             Container(
@@ -231,43 +186,4 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
-
-  Widget _qtyButton(String label, VoidCallback onTap) => Container(
-    width: 36,
-    height: 36,
-    decoration: BoxDecoration(
-      color: AppColors.cardDark,
-      shape: BoxShape.circle,
-    ),
-    child: IconButton(
-      padding: EdgeInsets.zero,
-      icon: Text(
-        label,
-        style: const TextStyle(
-          color: AppColors.buttonText,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-      onPressed: onTap,
-    ),
-  );
-
-  Widget _summaryRow(
-    String label,
-    String value,
-    Color primaryText,
-    Color secondaryText,
-  ) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
-    child: Row(
-      children: [
-        Text(label, style: TextStyle(color: secondaryText)),
-        const Spacer(),
-        Text(
-          value,
-          style: TextStyle(color: primaryText, fontWeight: FontWeight.w700),
-        ),
-      ],
-    ),
-  );
 }
