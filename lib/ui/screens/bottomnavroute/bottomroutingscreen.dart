@@ -76,7 +76,7 @@ class _BottomRoutingScreenState extends State<BottomRoutingScreen> {
   Widget _getScreenWidget(int index) {
     switch (index) {
       case 0:
-        return const HomeScreen();
+        return const HomeContent();
       case 1:
         return const MenuContent();
       case 2:
