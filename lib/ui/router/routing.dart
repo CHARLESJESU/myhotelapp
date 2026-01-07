@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 // Screen imports
+import '../screens/bottomnavroute/bottomroutingscreen.dart';
 import '../screens/home/home_ui.dart';
 import '../screens/login/login_ui.dart';
 import '../screens/sign_up/sign_up_ui.dart';
@@ -13,10 +15,11 @@ import '../screens/add_recipe/add_recipe_ui.dart';
 import '../screens/track_order/track_order_ui.dart';
 import '../screens/order_history/order_history_ui.dart';
 import '../screens/admin_order_management/admin_order_management_ui.dart';
-import '../screens/confirm_order_dialog/confirm_order_dialog_ui.dart';
 
 /// App route names
 class AppRoutes {
+  /// Main bottom navigation screen (entry after login)
+  static const String main = '/main';
   static const String home = '/home';
   static const String login = '/login';
   static const String signUp = '/sign-up';
@@ -29,117 +32,146 @@ class AppRoutes {
   static const String trackOrder = '/track-order';
   static const String orderHistory = '/order-history';
   static const String adminOrderManagement = '/admin-order-management';
-  static const String confirmOrderDialog = '/confirm-order-dialog';
 }
 
-/// App router for navigation
+/// App router for GetX navigation
 class AppRouter {
-  /// Generate routes for the app
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case AppRoutes.home:
-        return _buildRoute(const HomeScreen(), settings);
+  /// GetX route pages
+  static final routes = [
+    GetPage(
+      name: AppRoutes.login,
+      page: () => const LoginScreen(),
+      transition: Transition.fadeIn,
+    ),
+    // Main bottom navigation screen (entry after login)
+    GetPage(
+      name: AppRoutes.main,
+      page: () => const BottomRoutingScreen(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: AppRoutes.home,
+      page: () => const HomeScreen(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: AppRoutes.signUp,
+      page: () => const SignUpScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.forgotPassword,
+      page: () => const ForgotPasswordScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.menu,
+      page: () => const MenuScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.cart,
+      page: () => const CartScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.favorites,
+      page: () => const FavoritesScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.profile,
+      page: () => const ProfileScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.addRecipe,
+      page: () => const AddRecipeScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.trackOrder,
+      page: () => const TrackOrderScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.orderHistory,
+      page: () => const OrderHistoryScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.adminOrderManagement,
+      page: () => const AdminOrderManagementScreen(),
+      transition: Transition.fadeIn,
+    ),
+  ];
 
-      case AppRoutes.login:
-        return _buildRoute(const LoginScreen(), settings);
-
-      case AppRoutes.signUp:
-        return _buildRoute(const SignUpScreen(), settings);
-
-      case AppRoutes.forgotPassword:
-        return _buildRoute(const ForgotPasswordScreen(), settings);
-
-      case AppRoutes.menu:
-        return _buildRoute(const MenuScreen(), settings);
-
-      case AppRoutes.cart:
-        return _buildRoute(const CartScreen(), settings);
-
-      case AppRoutes.favorites:
-        return _buildRoute(const FavoritesScreen(), settings);
-
-      case AppRoutes.profile:
-        return _buildRoute(const ProfileScreen(), settings);
-
-      case AppRoutes.addRecipe:
-        return _buildRoute(const AddRecipeScreen(), settings);
-
-      case AppRoutes.trackOrder:
-        return _buildRoute(const TrackOrderScreen(), settings);
-
-      case AppRoutes.orderHistory:
-        return _buildRoute(const OrderHistoryScreen(), settings);
-
-      case AppRoutes.adminOrderManagement:
-        return _buildRoute(const AdminOrderManagementScreen(), settings);
-
-      case AppRoutes.confirmOrderDialog:
-        final args = settings.arguments as Map<String, dynamic>?;
-        return _buildRoute(
-          ConfirmOrderDialog(
-            items: args?['items'] ?? [],
-            deliveryFee: args?['deliveryFee'] ?? 0.0,
-            taxes: args?['taxes'] ?? 0.0,
-          ),
-          settings,
-        );
-
-      default:
-        return _buildRoute(const LoginScreen(), settings);
-    }
-  }
-
-  /// Build a MaterialPageRoute
-  static MaterialPageRoute<dynamic> _buildRoute(
-    Widget page,
-    RouteSettings settings,
-  ) {
-    return MaterialPageRoute(builder: (_) => page, settings: settings);
-  }
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Navigation helpers using GetX
+  // ─────────────────────────────────────────────────────────────────────────────
 
   /// Navigate to a named route
-  static Future<T?> navigateTo<T>(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    return Navigator.pushNamed<T>(context, routeName, arguments: arguments);
+  static Future<T?>? to<T>(String routeName, {dynamic arguments}) {
+    return Get.toNamed<T>(routeName, arguments: arguments);
   }
 
   /// Navigate and replace current route
-  static Future<T?> navigateAndReplace<T>(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    return Navigator.pushReplacementNamed<T, dynamic>(
-      context,
-      routeName,
-      arguments: arguments,
-    );
+  static Future<T?>? off<T>(String routeName, {dynamic arguments}) {
+    return Get.offNamed<T>(routeName, arguments: arguments);
   }
 
   /// Navigate and remove all previous routes
-  static Future<T?> navigateAndRemoveUntil<T>(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    return Navigator.pushNamedAndRemoveUntil<T>(
-      context,
-      routeName,
-      (route) => false,
-      arguments: arguments,
-    );
+  static Future<T?>? offAll<T>(String routeName, {dynamic arguments}) {
+    return Get.offAllNamed<T>(routeName, arguments: arguments);
   }
 
   /// Go back to previous screen
-  static void goBack<T>(BuildContext context, [T? result]) {
-    Navigator.pop<T>(context, result);
+  static void back<T>([T? result]) {
+    Get.back<T>(result: result);
   }
 
-  /// Check if can go back
-  static bool canGoBack(BuildContext context) {
-    return Navigator.canPop(context);
+  /// Show a dialog using GetX
+  static Future<T?> dialog<T>(
+    Widget dialog, {
+    bool barrierDismissible = true,
+    Color? barrierColor,
+  }) {
+    return Get.dialog<T>(
+      dialog,
+      barrierDismissible: barrierDismissible,
+      barrierColor: barrierColor ?? Colors.black54,
+    );
+  }
+
+  /// Show a snackbar using GetX
+  static void snackbar(
+    String title,
+    String message, {
+    Duration duration = const Duration(seconds: 3),
+    SnackPosition position = SnackPosition.BOTTOM,
+    Color? backgroundColor,
+    Color? colorText,
+  }) {
+    Get.snackbar(
+      title,
+      message,
+      duration: duration,
+      snackPosition: position,
+      backgroundColor: backgroundColor,
+      colorText: colorText,
+    );
+  }
+
+  /// Show a bottom sheet using GetX
+  static Future<T?> bottomSheet<T>(
+    Widget bottomSheet, {
+    bool isDismissible = true,
+    Color? backgroundColor,
+  }) {
+    return Get.bottomSheet<T>(
+      bottomSheet,
+      isDismissible: isDismissible,
+      backgroundColor: backgroundColor,
+    );
   }
 }

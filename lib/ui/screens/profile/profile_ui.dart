@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../services/theme_service.dart';
-import '../order_history/order_history_ui.dart';
+import '../../router/routing.dart';
 import 'widget/profile_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -31,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colors.primaryText),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Get.back(),
         ),
         centerTitle: true,
         title: Text(
@@ -86,9 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 8),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => OrderHistoryScreen()),
-                    ),
+                    onTap: () => Get.toNamed(AppRoutes.orderHistory),
                     child: ProfileListRow(
                       label: 'Order History',
                       icon: Icons.receipt_long,
@@ -125,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     btnBg: colors.buttonBg,
                     btnText: colors.buttonText,
                     primaryText: colors.primaryText,
-                    isDark: context.isDarkMode,
+                    isDark: context.isCurrentThemeDark,
                   ),
 
                   const SizedBox(height: 16),

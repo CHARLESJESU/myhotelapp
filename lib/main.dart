@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'constants/app_colors.dart';
 import 'services/theme_service.dart';
 import 'ui/router/routing.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: ThemeService.themeMode,
       builder: (context, mode, _) {
-        return MaterialApp(
+        return GetMaterialApp(
           title: 'Hostelia',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
           ),
           themeMode: mode,
           initialRoute: AppRoutes.login,
-          onGenerateRoute: AppRouter.generateRoute,
+          getPages: AppRouter.routes,
         );
       },
     );

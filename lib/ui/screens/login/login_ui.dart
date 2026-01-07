@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
-import '../forgot_password/forgot_password_ui.dart';
-import '../sign_up/sign_up_ui.dart';
-import '../home/home_ui.dart';
-import '../admin_order_management/admin_order_management_ui.dart';
+import '../../router/routing.dart';
 import '../../widgets/primary_button.dart';
 import 'widget/login_widget.dart';
 
@@ -22,16 +20,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void _onLogin() {
     final name = _usernameController.text.trim();
     if (name.toLowerCase() == 'admin') {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const AdminOrderManagementScreen()),
-      );
+      Get.offNamed(AppRoutes.adminOrderManagement);
       return;
     }
 
-    // navigate to the home page (UI-only)
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+    // navigate to the main bottom navigation screen (UI-only)
+    Get.offNamed(AppRoutes.main);
   }
 
   @override
@@ -200,14 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           // Forgot password
                           Center(
                             child: TextButton(
-                              onPressed: () {
-                                // navigate to forgot password page
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => ForgotPasswordScreen(),
-                                  ),
-                                );
-                              },
+                              onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
                               child: Text(
                                 'Forgot Password?',
                                 style: TextStyle(
@@ -229,13 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: TextStyle(color: colors.secondaryText),
                                 ),
                                 TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) => SignUpScreen(),
-                                      ),
-                                    );
-                                  },
+                                  onPressed: () => Get.toNamed(AppRoutes.signUp),
                                   child: Text(
                                     'Sign in',
                                     style: TextStyle(
@@ -262,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
               top: 12,
               right: 12,
               child: ThemeToggleButton(
-                isDark: context.isDarkMode,
+                isDark: context.isCurrentThemeDark,
                 cardBg: colors.inputBackground,
                 borderColor: colors.borderDefault,
                 iconColor: colors.buttonBg,

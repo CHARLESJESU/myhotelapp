@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import 'order_history_dummydata.dart';
 import 'widget/order_history_widget.dart';
@@ -41,7 +42,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colors.primaryText),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Get.back(),
         ),
         title: Text(
           'Order History',

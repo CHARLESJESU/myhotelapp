@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
-import '../add_recipe/add_recipe_ui.dart';
+import '../../router/routing.dart';
 import 'admin_order_management_dummydata.dart';
 import 'widget/admin_order_management_widget.dart';
 
@@ -51,11 +52,7 @@ class AdminOrderManagementScreen extends StatelessWidget {
         // centered "Add new Recipe" button
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (_) => const AddRecipeScreen()));
-          },
+          onPressed: () => Get.toNamed(AppRoutes.addRecipe),
           icon: Icon(Icons.add, color: colors.buttonText),
           label: Text(
             'Add new Recipe',

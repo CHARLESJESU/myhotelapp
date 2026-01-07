@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
-import '../menu/menu_ui.dart';
+import '../../router/routing.dart';
 import 'widget/track_order_widget.dart';
 
 class TrackOrderScreen extends StatelessWidget {
@@ -31,7 +32,7 @@ class TrackOrderScreen extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: IconButton(
                   icon: Icon(Icons.close, color: colors.primaryText),
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => Get.back(),
                 ),
               ),
               const SizedBox(height: 8),
@@ -78,9 +79,7 @@ class TrackOrderScreen extends StatelessWidget {
               
               const SizedBox(height: 12),
               TextButton(
-                onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => MenuScreen()),
-                ),
+                onPressed: () => Get.offNamed(AppRoutes.menu),
                 child: Text(
                   'Return to Menu',
                   style: TextStyle(

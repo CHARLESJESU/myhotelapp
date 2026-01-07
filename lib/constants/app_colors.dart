@@ -14,11 +14,11 @@ import 'package:flutter/material.dart';
 /// Extension to easily access theme-aware colors from BuildContext
 extension ThemeColors on BuildContext {
   /// Returns true if current theme is dark mode
-  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+  bool get isCurrentThemeDark => Theme.of(this).brightness == Brightness.dark;
 
   /// Get the appropriate color palette based on current theme
   AppColorPalette get colors =>
-      isDarkMode ? const AppColorPalette.dark() : const AppColorPalette.light();
+      isCurrentThemeDark ? const AppColorPalette.dark() : const AppColorPalette.light();
 }
 
 /// Unified color palette that provides the correct colors based on theme.

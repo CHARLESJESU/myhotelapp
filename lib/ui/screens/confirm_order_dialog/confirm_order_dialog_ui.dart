@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 
 class ConfirmOrderDialog extends StatelessWidget {
@@ -117,7 +118,7 @@ class ConfirmOrderDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () => Navigator.of(context).pop(false),
+                    onPressed: () => Get.back(result: false),
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.0),
                       child: Text(
@@ -137,7 +138,7 @@ class ConfirmOrderDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () => Navigator.of(context).pop(true),
+                    onPressed: () => Get.back(result: true),
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.0),
                       child: Text(

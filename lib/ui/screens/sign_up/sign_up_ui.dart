@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../widgets/primary_button.dart';
 
@@ -34,9 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Account created (UI-only)')));
+    Get.snackbar('Success', 'Account created (UI-only)');
   }
 
   @override
@@ -65,7 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => Get.back(),
                     icon: Icon(Icons.arrow_back, color: colors.primaryText),
                   ),
                   const Expanded(child: SizedBox()),
@@ -284,7 +283,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 8,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: context.isDarkMode
+                      color: context.isCurrentThemeDark
                           ? Colors.grey.shade800
                           : Colors.grey.shade300,
                     ),
@@ -383,7 +382,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       style: TextStyle(color: colors.secondaryText),
                     ),
                     TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () => Get.back(),
                       child: Text(
                         'Login',
                         style: TextStyle(

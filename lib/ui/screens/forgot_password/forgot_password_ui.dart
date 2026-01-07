@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../widgets/primary_button.dart';
 
@@ -15,9 +16,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   void _onSend() {
     // UI only: show a SnackBar to demonstrate action
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Reset link sent (UI-only)')));
+    Get.snackbar('Success', 'Reset link sent (UI-only)');
   }
 
   @override
@@ -42,7 +41,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => Get.back(),
                     icon: Icon(Icons.arrow_back, color: colors.primaryText),
                   ),
                   const Expanded(child: SizedBox()),
