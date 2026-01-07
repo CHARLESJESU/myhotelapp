@@ -20,18 +20,7 @@ class ConfirmOrderDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark ? AppColors.cardDark : AppColors.lightCard;
-    final titleColor = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondary = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
-    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
-    final buttonText = isDark
-        ? AppColors.buttonText
-        : AppColors.lightButtonText;
+    final colors = context.colors;
 
     final total = subtotal + deliveryFee + taxes;
 
@@ -40,7 +29,7 @@ class ConfirmOrderDialog extends StatelessWidget {
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
       child: Container(
         decoration: BoxDecoration(
-          color: bg,
+          color: colors.card,
           borderRadius: BorderRadius.circular(16),
         ),
         padding: const EdgeInsets.all(20),
@@ -52,7 +41,7 @@ class ConfirmOrderDialog extends StatelessWidget {
               child: Text(
                 'Confirm Order',
                 style: TextStyle(
-                  color: titleColor,
+                  color: colors.primaryText,
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
                 ),
@@ -62,7 +51,7 @@ class ConfirmOrderDialog extends StatelessWidget {
             Center(
               child: Text(
                 'Please review your order before confirming.',
-                style: TextStyle(color: secondary),
+                style: TextStyle(color: colors.secondaryText),
               ),
             ),
             const SizedBox(height: 16),
@@ -77,14 +66,14 @@ class ConfirmOrderDialog extends StatelessWidget {
                       child: Text(
                         '${it['qty']}x ${it['title']}',
                         style: TextStyle(
-                          color: titleColor,
+                          color: colors.primaryText,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     Text(
                       '\$${((it['price'] as double) * (it['qty'] as int)).toStringAsFixed(2)}',
-                      style: TextStyle(color: titleColor),
+                      style: TextStyle(color: colors.primaryText),
                     ),
                   ],
                 ),
@@ -101,14 +90,14 @@ class ConfirmOrderDialog extends StatelessWidget {
                 Text(
                   'Total',
                   style: TextStyle(
-                    color: secondary,
+                    color: colors.secondaryText,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
                   '\$${total.toStringAsFixed(2)}',
                   style: TextStyle(
-                    color: titleColor,
+                    color: colors.primaryText,
                     fontWeight: FontWeight.w800,
                     fontSize: 18,
                   ),
@@ -122,10 +111,8 @@ class ConfirmOrderDialog extends StatelessWidget {
                 Expanded(
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      backgroundColor: isDark
-                          ? AppColors.cardDark
-                          : AppColors.lightCard,
-                      foregroundColor: titleColor,
+                      backgroundColor: colors.card,
+                      foregroundColor: colors.primaryText,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -144,8 +131,8 @@ class ConfirmOrderDialog extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: buttonBg,
-                      foregroundColor: buttonText,
+                      backgroundColor: colors.buttonBg,
+                      foregroundColor: colors.buttonText,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

@@ -21,26 +21,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark
-        ? AppColors.screenBackground
-        : AppColors.lightScreenBackground;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondaryText = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
-    final inputBg = isDark
-        ? AppColors.inputBackground
-        : AppColors.lightInputBackground;
-    final cardBg = isDark ? AppColors.cardDark : AppColors.lightCard;
-    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
+    final colors = context.colors;
 
     final categories = HomeDummyData.categories;
 
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: colors.screenBackground,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
@@ -50,13 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
               // top row: location and avatar
               Row(
                 children: [
-                  const Icon(Icons.place, color: AppColors.lightPrimaryText),
+                  Icon(Icons.place, color: colors.secondaryText),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Delivering to Home',
                       style: TextStyle(
-                        color: secondaryText,
+                        color: colors.secondaryText,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -66,10 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                     ).push(MaterialPageRoute(builder: (_) => ProfileScreen())),
                     child: CircleAvatar(
-                      backgroundColor: cardBg,
-                      child: const Icon(
+                      backgroundColor: colors.card,
+                      child: Icon(
                         Icons.person,
-                        color: AppColors.buttonBg,
+                        color: colors.buttonBg,
                       ),
                     ),
                   ),
@@ -82,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 'Good morning, Alex!',
                 style: TextStyle(
-                  color: primaryText,
+                  color: colors.primaryText,
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
                 ),
@@ -92,9 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // search bar
               HomeSearchBar(
-                inputBg: inputBg,
-                primaryText: primaryText,
-                secondaryText: secondaryText,
+                inputBg: colors.inputBackground,
+                primaryText: colors.primaryText,
+                secondaryText: colors.secondaryText,
               ),
 
               const SizedBox(height: 12),
@@ -105,14 +91,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: PageView(
                   children: [
                     PromoCard(
-                      cardBg: cardBg,
-                      primaryText: primaryText,
-                      secondaryText: secondaryText,
+                      cardBg: colors.card,
+                      primaryText: colors.primaryText,
+                      secondaryText: colors.secondaryText,
                     ),
                     PromoCard(
-                      cardBg: cardBg,
-                      primaryText: primaryText,
-                      secondaryText: secondaryText,
+                      cardBg: colors.card,
+                      primaryText: colors.primaryText,
+                      secondaryText: colors.secondaryText,
                     ),
                   ],
                 ),
@@ -133,9 +119,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     return CategoryChip(
                       label: categories[i],
                       isSelected: selected,
-                      buttonBg: buttonBg,
-                      inputBg: inputBg,
-                      secondaryText: secondaryText,
+                      buttonBg: colors.buttonBg,
+                      inputBg: colors.inputBackground,
+                      secondaryText: colors.secondaryText,
                       onTap: () => setState(() => _selectedCategory = i),
                     );
                   },
@@ -145,10 +131,10 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 16),
 
               // Featured Dishes horizontal list
-              const Text(
+              Text(
                 'Featured Dishes',
                 style: TextStyle(
-                  color: AppColors.primaryText,
+                  color: colors.primaryText,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -162,9 +148,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(width: 12),
                   itemBuilder: (context, i) =>
                       DishCard(
-                        cardBg: cardBg,
-                        primaryText: primaryText,
-                        secondaryText: secondaryText,
+                        cardBg: colors.card,
+                        primaryText: colors.primaryText,
+                        secondaryText: colors.secondaryText,
                       ),
                 ),
               ),
@@ -172,10 +158,10 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 12),
 
               // Restaurants list
-              const Text(
+              Text(
                 'Restaurants Near You',
                 style: TextStyle(
-                  color: AppColors.primaryText,
+                  color: colors.primaryText,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -187,9 +173,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 12),
                   itemBuilder: (context, i) =>
                       RestaurantCard(
-                        cardBg: cardBg,
-                        primaryText: primaryText,
-                        secondaryText: secondaryText,
+                        cardBg: colors.card,
+                        primaryText: colors.primaryText,
+                        secondaryText: colors.secondaryText,
                       ),
                 ),
               ),
@@ -223,10 +209,10 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           setState(() => _bottomIndex = i);
         },
-        backgroundColor: bg,
+        backgroundColor: colors.screenBackground,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: buttonBg,
-        unselectedItemColor: secondaryText,
+        selectedItemColor: colors.bottomNavActive,
+        unselectedItemColor: colors.bottomNavInactive,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(

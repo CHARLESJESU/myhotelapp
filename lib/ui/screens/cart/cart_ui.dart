@@ -32,41 +32,27 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark
-        ? AppColors.screenBackground
-        : AppColors.lightScreenBackground;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondaryText = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
-    final cardBg = isDark ? AppColors.cardDark : AppColors.lightCard;
-    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
-    final buttonText = isDark
-        ? AppColors.buttonText
-        : AppColors.lightButtonText;
+    final colors = context.colors;
 
     final total = subtotal + deliveryFee + taxes;
 
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: colors.screenBackground,
       appBar: AppBar(
-        backgroundColor: bg,
+        backgroundColor: colors.screenBackground,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: primaryText),
+          icon: Icon(Icons.arrow_back, color: colors.primaryText),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           'My Cart',
-          style: TextStyle(color: primaryText, fontWeight: FontWeight.bold),
+          style: TextStyle(color: colors.primaryText, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.delete_outline, color: primaryText),
+            icon: Icon(Icons.delete_outline, color: colors.primaryText),
             onPressed: () {
               setState(() => items.clear());
             },
@@ -87,9 +73,9 @@ class _CartScreenState extends State<CartScreen> {
                     title: item['title'],
                     price: item['price'],
                     qty: item['qty'],
-                    cardBg: cardBg,
-                    primaryText: primaryText,
-                    secondaryText: secondaryText,
+                    cardBg: colors.card,
+                    primaryText: colors.primaryText,
+                    secondaryText: colors.secondaryText,
                     onIncrement: () => _changeQty(i, 1),
                     onDecrement: () => _changeQty(i, -1),
                   );
@@ -100,28 +86,28 @@ class _CartScreenState extends State<CartScreen> {
             SummaryRow(
               label: 'Subtotal',
               value: '\$${subtotal.toStringAsFixed(2)}',
-              primaryText: primaryText,
-              secondaryText: secondaryText,
+              primaryText: colors.primaryText,
+              secondaryText: colors.secondaryText,
             ),
             const SizedBox(height: 8),
             SummaryRow(
               label: 'Delivery Fee',
               value: '\$${deliveryFee.toStringAsFixed(2)}',
-              primaryText: primaryText,
-              secondaryText: secondaryText,
+              primaryText: colors.primaryText,
+              secondaryText: colors.secondaryText,
             ),
             const SizedBox(height: 8),
             SummaryRow(
               label: 'Taxes',
               value: '\$${taxes.toStringAsFixed(2)}',
-              primaryText: primaryText,
-              secondaryText: secondaryText,
+              primaryText: colors.primaryText,
+              secondaryText: colors.secondaryText,
             ),
             const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               decoration: BoxDecoration(
-                color: cardBg,
+                color: colors.card,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -130,11 +116,11 @@ class _CartScreenState extends State<CartScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Total', style: TextStyle(color: secondaryText)),
+                        Text('Total', style: TextStyle(color: colors.secondaryText)),
                         Text(
                           '\$${total.toStringAsFixed(2)}',
                           style: TextStyle(
-                            color: primaryText,
+                            color: colors.primaryText,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -146,8 +132,8 @@ class _CartScreenState extends State<CartScreen> {
                     height: 48,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: buttonBg,
-                        foregroundColor: buttonText,
+                        backgroundColor: colors.buttonBg,
+                        foregroundColor: colors.buttonText,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

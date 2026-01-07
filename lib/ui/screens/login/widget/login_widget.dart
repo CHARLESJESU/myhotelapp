@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../constants/app_colors.dart';
 import '../../../../services/theme_service.dart';
 
 /// Login icon circle widget

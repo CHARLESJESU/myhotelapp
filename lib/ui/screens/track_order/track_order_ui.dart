@@ -17,24 +17,10 @@ class TrackOrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark
-        ? AppColors.screenBackground
-        : AppColors.lightScreenBackground;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondaryText = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
-    final cardBg = isDark ? AppColors.cardDark : AppColors.lightCard;
-    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
-    final buttonText = isDark
-        ? AppColors.buttonText
-        : AppColors.lightButtonText;
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: colors.screenBackground,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -44,7 +30,7 @@ class TrackOrderScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.topRight,
                 child: IconButton(
-                  icon: Icon(Icons.close, color: primaryText),
+                  icon: Icon(Icons.close, color: colors.primaryText),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
@@ -57,7 +43,7 @@ class TrackOrderScreen extends StatelessWidget {
               Text(
                 'Your Order is on its\nWay!',
                 style: TextStyle(
-                  color: primaryText,
+                  color: colors.primaryText,
                   fontSize: 26,
                   fontWeight: FontWeight.w800,
                 ),
@@ -66,7 +52,7 @@ class TrackOrderScreen extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 'Thank you for your order. You can track its progress below.',
-                style: TextStyle(color: secondaryText),
+                style: TextStyle(color: colors.secondaryText),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 18),
@@ -75,9 +61,9 @@ class TrackOrderScreen extends StatelessWidget {
               OrderInfoCard(
                 orderNumber: orderNumber,
                 eta: eta,
-                cardBg: cardBg,
-                primaryText: primaryText,
-                secondaryText: secondaryText,
+                cardBg: colors.card,
+                primaryText: colors.primaryText,
+                secondaryText: colors.secondaryText,
               ),
 
               const SizedBox(height: 18),
@@ -85,8 +71,8 @@ class TrackOrderScreen extends StatelessWidget {
               // Track Order button
               TrackButton(
                 label: 'Track Order',
-                backgroundColor: buttonBg,
-                textColor: buttonText,
+                backgroundColor: colors.buttonBg,
+                textColor: colors.buttonText,
                 onPressed: () {},
               ),
               
@@ -98,7 +84,7 @@ class TrackOrderScreen extends StatelessWidget {
                 child: Text(
                   'Return to Menu',
                   style: TextStyle(
-                    color: buttonBg,
+                    color: colors.buttonBg,
                     fontWeight: FontWeight.w700,
                   ),
                 ),

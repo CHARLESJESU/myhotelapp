@@ -19,21 +19,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark
-        ? AppColors.screenBackground
-        : AppColors.lightScreenBackground;
-    final cardBg = isDark ? AppColors.cardDark : AppColors.lightCard;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondaryText = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
-    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
-    final buttonText = isDark
-        ? AppColors.buttonText
-        : AppColors.lightButtonText;
+    final colors = context.colors;
 
     final filtered = orders
         .where(
@@ -49,17 +35,17 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
         .toList();
 
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: colors.screenBackground,
       appBar: AppBar(
-        backgroundColor: bg,
+        backgroundColor: colors.screenBackground,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: primaryText),
+          icon: Icon(Icons.arrow_back, color: colors.primaryText),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           'Order History',
-          style: TextStyle(color: primaryText, fontWeight: FontWeight.bold),
+          style: TextStyle(color: colors.primaryText, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -68,11 +54,9 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
         child: Column(
           children: [
             OrderHistorySearchBar(
-              inputBg: isDark
-                  ? AppColors.inputBackground
-                  : AppColors.lightInputBackground,
-              primaryText: primaryText,
-              secondaryText: secondaryText,
+              inputBg: colors.inputBackground,
+              primaryText: colors.primaryText,
+              secondaryText: colors.secondaryText,
               onChanged: (v) => setState(() => query = v),
             ),
 
@@ -81,10 +65,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             // segmented control
             OrderHistoryFilterTabs(
               filter: filter,
-              cardBg: cardBg,
-              buttonBg: buttonBg,
-              buttonText: buttonText,
-              secondaryText: secondaryText,
+              cardBg: colors.card,
+              buttonBg: colors.buttonBg,
+              buttonText: colors.buttonText,
+              secondaryText: colors.secondaryText,
               onFilterChanged: (newFilter) => setState(() => filter = newFilter),
             ),
 
@@ -103,11 +87,11 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                     summary: o['summary'] as String,
                     price: o['price'] as double,
                     isDelivered: isDelivered,
-                    cardBg: cardBg,
-                    primaryText: primaryText,
-                    secondaryText: secondaryText,
-                    buttonBg: buttonBg,
-                    buttonText: buttonText,
+                    cardBg: colors.card,
+                    primaryText: colors.primaryText,
+                    secondaryText: colors.secondaryText,
+                    buttonBg: colors.buttonBg,
+                    buttonText: colors.buttonText,
                   );
                 },
               ),

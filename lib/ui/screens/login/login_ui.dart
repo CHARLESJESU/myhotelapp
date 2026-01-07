@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../constants/app_colors.dart';
-import '../../../services/theme_service.dart';
 import '../forgot_password/forgot_password_ui.dart';
 import '../sign_up/sign_up_ui.dart';
 import '../home/home_ui.dart';
@@ -44,32 +43,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    // pick colors based on theme state
-    final bg = isDark
-        ? AppColors.screenBackground
-        : AppColors.lightScreenBackground;
-    final cardBg = isDark ? AppColors.cardDark : AppColors.lightCard;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondaryText = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
-    final inputBg = isDark
-        ? AppColors.inputBackground
-        : AppColors.lightInputBackground;
-    final borderDefault = isDark
-        ? AppColors.borderDefault
-        : AppColors.lightBorderDefault;
-    final borderActive = AppColors.borderActive; // same for both modes
-    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
-    final buttonText = isDark
-        ? AppColors.buttonText
-        : AppColors.lightButtonText;
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: colors.screenBackground,
       body: SafeArea(
         child: Stack(
           children: [
@@ -90,10 +67,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           // centered circular icon
                           LoginIconCircle(
-                            cardBg: cardBg,
-                            iconColor: isDark
-                                ? AppColors.buttonBg
-                                : AppColors.successIcon,
+                            cardBg: colors.card,
+                            iconColor: colors.buttonBg,
                           ),
 
                           const SizedBox(height: 28),
@@ -105,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                 fontSize: 34,
                                 fontWeight: FontWeight.w800,
-                                color: primaryText,
+                                color: colors.primaryText,
                               ),
                             ),
                           ),
@@ -118,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: secondaryText,
+                                color: colors.secondaryText,
                               ),
                             ),
                           ),
@@ -129,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text(
                             'Username',
                             style: TextStyle(
-                              color: primaryText,
+                              color: colors.primaryText,
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
                             ),
@@ -139,23 +114,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           // username field
                           TextField(
                             controller: _usernameController,
-                            style: TextStyle(color: primaryText),
+                            style: TextStyle(color: colors.primaryText),
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: inputBg,
+                              fillColor: colors.inputBackground,
                               hintText: 'Enter your username',
-                              hintStyle: TextStyle(color: secondaryText),
+                              hintStyle: TextStyle(color: colors.secondaryText),
                               prefixIcon: Icon(
                                 Icons.person,
-                                color: secondaryText,
+                                color: colors.secondaryText,
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(color: borderDefault),
+                                borderSide: BorderSide(color: colors.borderDefault),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(color: borderActive),
+                                borderSide: BorderSide(color: colors.borderActive),
                               ),
                             ),
                           ),
@@ -165,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text(
                             'Password',
                             style: TextStyle(
-                              color: primaryText,
+                              color: colors.primaryText,
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
                             ),
@@ -177,15 +152,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextField(
                             controller: _passwordController,
                             obscureText: _obscurePassword,
-                            style: TextStyle(color: primaryText),
+                            style: TextStyle(color: colors.primaryText),
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: inputBg,
+                              fillColor: colors.inputBackground,
                               hintText: 'Enter your password',
-                              hintStyle: TextStyle(color: secondaryText),
+                              hintStyle: TextStyle(color: colors.secondaryText),
                               prefixIcon: Icon(
                                 Icons.lock,
-                                color: secondaryText,
+                                color: colors.secondaryText,
                               ),
                               suffixIcon: IconButton(
                                 onPressed: () => setState(
@@ -195,16 +170,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                   _obscurePassword
                                       ? Icons.visibility_off
                                       : Icons.visibility,
-                                  color: secondaryText,
+                                  color: colors.secondaryText,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(color: borderDefault),
+                                borderSide: BorderSide(color: colors.borderDefault),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(color: borderActive),
+                                borderSide: BorderSide(color: colors.borderActive),
                               ),
                             ),
                           ),
@@ -215,9 +190,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           PrimaryButton(
                             label: 'Login',
                             onPressed: _onLogin,
-                            backgroundColor: buttonBg,
-                            textColor: buttonText,
-                            shadowColor: AppColors.buttonShadow,
+                            backgroundColor: colors.buttonBg,
+                            textColor: colors.buttonText,
+                            shadowColor: colors.buttonShadow,
                           ),
 
                           const SizedBox(height: 18),
@@ -236,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Text(
                                 'Forgot Password?',
                                 style: TextStyle(
-                                  color: buttonBg,
+                                  color: colors.buttonBg,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -251,7 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 Text(
                                   "Don't have an account? ",
-                                  style: TextStyle(color: secondaryText),
+                                  style: TextStyle(color: colors.secondaryText),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -264,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: Text(
                                     'Sign in',
                                     style: TextStyle(
-                                      color: buttonBg,
+                                      color: colors.buttonBg,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -287,16 +262,10 @@ class _LoginScreenState extends State<LoginScreen> {
               top: 12,
               right: 12,
               child: ThemeToggleButton(
-                isDark: isDark,
-                cardBg: isDark
-                    ? AppColors.cardDark
-                    : AppColors.lightInputBackground,
-                borderColor: isDark
-                    ? AppColors.borderDefault
-                    : AppColors.lightBorderDefault,
-                iconColor: isDark
-                    ? AppColors.buttonBg
-                    : AppColors.lightPrimaryText,
+                isDark: context.isDarkMode,
+                cardBg: colors.inputBackground,
+                borderColor: colors.borderDefault,
+                iconColor: colors.buttonBg,
               ),
             ),
           ],

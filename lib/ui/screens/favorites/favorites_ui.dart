@@ -17,24 +17,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark
-        ? AppColors.screenBackground
-        : AppColors.lightScreenBackground;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondaryText = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
-    final inputBg = isDark
-        ? AppColors.inputBackground
-        : AppColors.lightInputBackground;
-    final cardBg = isDark ? AppColors.cardDark : AppColors.lightCard;
-    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
-    final buttonText = isDark
-        ? AppColors.buttonText
-        : AppColors.lightButtonText;
+    final colors = context.colors;
 
     final filtered = items
         .where(
@@ -45,17 +28,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         .toList();
 
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: colors.screenBackground,
       appBar: AppBar(
-        backgroundColor: bg,
+        backgroundColor: colors.screenBackground,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: primaryText),
+          icon: Icon(Icons.arrow_back, color: colors.primaryText),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           'Favorites',
-          style: TextStyle(color: primaryText, fontWeight: FontWeight.bold),
+          style: TextStyle(color: colors.primaryText, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -63,7 +46,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             onPressed: () {},
             child: Text(
               'Edit',
-              style: TextStyle(color: buttonBg, fontWeight: FontWeight.w600),
+              style: TextStyle(color: colors.buttonBg, fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -74,9 +57,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           children: [
             // search
             FavoritesSearchBar(
-              inputBg: inputBg,
-              primaryText: primaryText,
-              secondaryText: secondaryText,
+              inputBg: colors.inputBackground,
+              primaryText: colors.primaryText,
+              secondaryText: colors.secondaryText,
               hintText: 'Search in favorites...',
               onChanged: (v) => setState(() => _query = v),
             ),
@@ -95,11 +78,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   return FavoriteCard(
                     title: it['title'] as String,
                     price: it['price'] as double,
-                    cardBg: cardBg,
-                    primaryText: primaryText,
-                    secondaryText: secondaryText,
-                    buttonBg: buttonBg,
-                    buttonText: buttonText,
+                    cardBg: colors.card,
+                    primaryText: colors.primaryText,
+                    secondaryText: colors.secondaryText,
+                    buttonBg: colors.buttonBg,
+                    buttonText: colors.buttonText,
                   );
                 },
               ),

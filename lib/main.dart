@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hostui/ui/screens/login/login_ui.dart';
 import 'constants/app_colors.dart';
 import 'services/theme_service.dart';
+import 'ui/router/routing.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,7 +48,8 @@ class MyApp extends StatelessWidget {
             ),
           ),
           themeMode: mode,
-          home: const LoginScreen(),
+          initialRoute: AppRoutes.login,
+          onGenerateRoute: AppRouter.generateRoute,
         );
       },
     );

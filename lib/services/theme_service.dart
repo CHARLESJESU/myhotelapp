@@ -8,6 +8,18 @@ class ThemeService {
 
   static bool get isDark => themeMode.value == ThemeMode.dark;
 
+  /// Returns human-readable label for current theme mode
+  static String get appearanceLabel {
+    switch (current) {
+      case ThemeMode.dark:
+        return 'Dark';
+      case ThemeMode.light:
+        return 'Light';
+      default:
+        return 'System';
+    }
+  }
+
   static void setThemeMode(ThemeMode mode) => themeMode.value = mode;
 
   static void setDark(bool dark) => themeMode.value = dark ? ThemeMode.dark : ThemeMode.light;

@@ -9,47 +9,37 @@ class AdminOrderManagementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark
-        ? AppColors.screenBackground
-        : AppColors.lightScreenBackground;
-    final cardBg = isDark ? AppColors.cardDark : AppColors.lightCard;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondaryText = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
+    final colors = context.colors;
 
     final orders = AdminOrderManagementDummyData.sampleOrders;
 
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        backgroundColor: bg,
+        backgroundColor: colors.screenBackground,
         appBar: AppBar(
-          backgroundColor: bg,
+          backgroundColor: colors.screenBackground,
           elevation: 0,
           centerTitle: true,
           title: Text(
             'Order Management',
-            style: TextStyle(color: primaryText, fontWeight: FontWeight.w700),
+            style: TextStyle(color: colors.primaryText, fontWeight: FontWeight.w700),
           ),
           leading: IconButton(
-            icon: Icon(Icons.search, color: AppColors.appBarIcon),
+            icon: Icon(Icons.search, color: colors.appBarIcon),
             onPressed: () {},
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.filter_list, color: AppColors.appBarIcon),
+              icon: Icon(Icons.filter_list, color: colors.appBarIcon),
               onPressed: () {},
             ),
           ],
           bottom: TabBar(
             isScrollable: true,
-            indicatorColor: AppColors.lightBottomNavActive,
-            labelColor: AppColors.lightBottomNavActive,
-            unselectedLabelColor: secondaryText,
+            indicatorColor: colors.bottomNavActive,
+            labelColor: colors.bottomNavActive,
+            unselectedLabelColor: colors.secondaryText,
             tabs: const [
               Tab(text: 'All'),
               Tab(text: 'New'),
@@ -66,17 +56,15 @@ class AdminOrderManagementScreen extends StatelessWidget {
               context,
             ).push(MaterialPageRoute(builder: (_) => const AddRecipeScreen()));
           },
-          icon: Icon(Icons.add, color: AppColors.buttonText),
+          icon: Icon(Icons.add, color: colors.buttonText),
           label: Text(
             'Add new Recipe',
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w700,
-              color: AppColors.buttonText,
+              color: colors.buttonText,
             ),
           ),
-          backgroundColor: isDark
-              ? AppColors.buttonBg
-              : AppColors.lightButtonBg,
+          backgroundColor: colors.buttonBg,
         ),
         body: TabBarView(
           children: [
@@ -84,33 +72,33 @@ class AdminOrderManagementScreen extends StatelessWidget {
               context,
               orders,
               null,
-              cardBg,
-              primaryText,
-              secondaryText,
+              colors.card,
+              colors.primaryText,
+              colors.secondaryText,
             ),
             _buildOrderList(
               context,
               orders,
               'New',
-              cardBg,
-              primaryText,
-              secondaryText,
+              colors.card,
+              colors.primaryText,
+              colors.secondaryText,
             ),
             _buildOrderList(
               context,
               orders,
               'Preparing',
-              cardBg,
-              primaryText,
-              secondaryText,
+              colors.card,
+              colors.primaryText,
+              colors.secondaryText,
             ),
             _buildOrderList(
               context,
               orders,
               'Delivered',
-              cardBg,
-              primaryText,
-              secondaryText,
+              colors.card,
+              colors.primaryText,
+              colors.secondaryText,
             ),
           ],
         ),

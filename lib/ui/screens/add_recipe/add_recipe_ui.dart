@@ -26,29 +26,9 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
   bool _showSuccess = false;
   bool _hasImage = false;
 
-  String _appearance = 'Dark';
-
   @override
   void initState() {
     super.initState();
-    final mode = ThemeService.current;
-    _appearance = mode == ThemeMode.dark
-        ? 'Dark'
-        : mode == ThemeMode.light
-        ? 'Light'
-        : 'System';
-    ThemeService.themeMode.addListener(_onThemeModeChanged);
-  }
-
-  void _onThemeModeChanged() {
-    final mode = ThemeService.current;
-    setState(() {
-      _appearance = mode == ThemeMode.dark
-          ? 'Dark'
-          : mode == ThemeMode.light
-          ? 'Light'
-          : 'System';
-    });
   }
 
   void _onUploadImage() {
@@ -74,7 +54,6 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
   @override
   void dispose() {
-    ThemeService.themeMode.removeListener(_onThemeModeChanged);
     _nameController.dispose();
     _descriptionController.dispose();
     _priceController.dispose();
@@ -83,34 +62,14 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark
-        ? AppColors.screenBackground
-        : AppColors.lightScreenBackground;
-    final inputBg = isDark
-        ? AppColors.inputBackground
-        : AppColors.lightInputBackground;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondaryText = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
-    final borderDefault = isDark
-        ? AppColors.borderDefault
-        : AppColors.lightBorderDefault;
-    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
-    final buttonText = isDark
-        ? AppColors.buttonText
-        : AppColors.lightButtonText;
-    final appBarBg = isDark ? AppColors.appBarBg : bg;
+    final colors = context.colors; // ✅ Clean theme-aware colors
 
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: colors.screenBackground,
       appBar: AppBar(
-        backgroundColor: appBarBg,
-        title: Text('Add New Recipe', style: TextStyle(color: primaryText)),
-        leading: BackButton(color: primaryText),
+        backgroundColor: colors.appBarBg,
+        title: Text('Add New Recipe', style: TextStyle(color: colors.primaryText)),
+        leading: BackButton(color: colors.primaryText),
         elevation: 0,
       ),
       body: SafeArea(
@@ -131,9 +90,8 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                       children: [
                         // Appearance selector
                         AppearanceSelector(
-                          appearance: _appearance,
+                          appearance: ThemeService.appearanceLabel,
                           onAppearanceChanged: (label) {
-                            setState(() => _appearance = label);
                             if (label == 'Light') ThemeService.setThemeMode(ThemeMode.light);
                             if (label == 'Dark') ThemeService.setThemeMode(ThemeMode.dark);
                             if (label == 'System') ThemeService.setThemeMode(ThemeMode.system);
@@ -142,7 +100,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
                         // main card
                         Card(
-                          color: inputBg,
+                          color: colors.inputBackground,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -155,24 +113,24 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                 // Food Name
                                 TextFormField(
                                   controller: _nameController,
-                                  style: TextStyle(color: primaryText),
+                                  style: TextStyle(color: colors.primaryText),
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: inputBg,
+                                    fillColor: colors.inputBackground,
                                     labelText: 'Food Name',
-                                    labelStyle: TextStyle(color: primaryText),
+                                    labelStyle: TextStyle(color: colors.primaryText),
                                     hintText: 'e.g. Classic Margherita Pizza',
-                                    hintStyle: TextStyle(color: secondaryText),
+                                    hintStyle: TextStyle(color: colors.secondaryText),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                       borderSide: BorderSide(
-                                        color: borderDefault,
+                                        color: colors.borderDefault,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.borderActive,
+                                      borderSide: BorderSide(
+                                        color: colors.borderActive,
                                       ),
                                     ),
                                   ),
@@ -186,25 +144,25 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                 // Description
                                 TextFormField(
                                   controller: _descriptionController,
-                                  style: TextStyle(color: primaryText),
+                                  style: TextStyle(color: colors.primaryText),
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: inputBg,
+                                    fillColor: colors.inputBackground,
                                     labelText: 'Description (Optional)',
-                                    labelStyle: TextStyle(color: primaryText),
+                                    labelStyle: TextStyle(color: colors.primaryText),
                                     hintText:
                                         'e.g. Fresh basil, mozzarella, and a rich tomato sauce...',
-                                    hintStyle: TextStyle(color: secondaryText),
+                                    hintStyle: TextStyle(color: colors.secondaryText),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                       borderSide: BorderSide(
-                                        color: borderDefault,
+                                        color: colors.borderDefault,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.borderActive,
+                                      borderSide: BorderSide(
+                                        color: colors.borderActive,
                                       ),
                                     ),
                                   ),
@@ -218,24 +176,24 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   value: _mode,
                                   decoration: InputDecoration(
                                     labelText: 'Mode of Food',
-                                    labelStyle: TextStyle(color: primaryText),
+                                    labelStyle: TextStyle(color: colors.primaryText),
                                     filled: true,
-                                    fillColor: inputBg,
+                                    fillColor: colors.inputBackground,
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                       borderSide: BorderSide(
-                                        color: borderDefault,
+                                        color: colors.borderDefault,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.borderActive,
+                                      borderSide: BorderSide(
+                                        color: colors.borderActive,
                                       ),
                                     ),
                                   ),
-                                  dropdownColor: inputBg,
-                                  style: TextStyle(color: primaryText),
+                                  dropdownColor: colors.inputBackground,
+                                  style: TextStyle(color: colors.primaryText),
                                   items: AddRecipeDummyData.modes
                                       .map(
                                         (m) => DropdownMenuItem(
@@ -254,24 +212,24 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   value: _category,
                                   decoration: InputDecoration(
                                     labelText: 'Food Category',
-                                    labelStyle: TextStyle(color: primaryText),
+                                    labelStyle: TextStyle(color: colors.primaryText),
                                     filled: true,
-                                    fillColor: inputBg,
+                                    fillColor: colors.inputBackground,
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                       borderSide: BorderSide(
-                                        color: borderDefault,
+                                        color: colors.borderDefault,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.borderActive,
+                                      borderSide: BorderSide(
+                                        color: colors.borderActive,
                                       ),
                                     ),
                                   ),
-                                  dropdownColor: inputBg,
-                                  style: TextStyle(color: primaryText),
+                                  dropdownColor: colors.inputBackground,
+                                  style: TextStyle(color: colors.primaryText),
                                   items: AddRecipeDummyData.categories
                                       .map(
                                         (c) => DropdownMenuItem(
@@ -289,27 +247,27 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                 const SizedBox(height: 12),
                                 TextFormField(
                                   controller: _priceController,
-                                  style: const TextStyle(
-                                    color: AppColors.primaryText,
+                                  style: TextStyle(
+                                    color: colors.primaryText,
                                   ),
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: inputBg,
+                                    fillColor: colors.inputBackground,
                                     labelText: 'Price / Cost',
-                                    labelStyle: TextStyle(color: primaryText),
+                                    labelStyle: TextStyle(color: colors.primaryText),
                                     prefixText: '\$ ',
                                     hintText: '0.00',
-                                    hintStyle: TextStyle(color: secondaryText),
+                                    hintStyle: TextStyle(color: colors.secondaryText),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                       borderSide: BorderSide(
-                                        color: borderDefault,
+                                        color: colors.borderDefault,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                        color: AppColors.borderActive,
+                                      borderSide: BorderSide(
+                                        color: colors.borderActive,
                                       ),
                                     ),
                                   ),
@@ -333,7 +291,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   'Upload Food Image (Optional)',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    color: primaryText,
+                                    color: colors.primaryText,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -344,13 +302,13 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                             8,
                                           ),
                                           child: Container(
-                                            color: AppColors.uploadPlaceholder,
+                                            color: colors.uploadPlaceholder,
                                             width: double.infinity,
                                             height: double.infinity,
-                                            child: const Icon(
+                                            child: Icon(
                                               Icons.restaurant,
                                               size: 36,
-                                              color: AppColors.buttonText,
+                                              color: colors.buttonText,
                                             ),
                                           ),
                                         )
@@ -379,9 +337,9 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                           child: PrimaryButton(
                             label: AppStrings.addRecipe,
                             onPressed: _onAddRecipe,
-                            backgroundColor: buttonBg,
-                            textColor: buttonText,
-                            shadowColor: AppColors.buttonShadow,
+                            backgroundColor: colors.buttonBg,
+                            textColor: colors.buttonText,
+                            shadowColor: colors.buttonShadow,
                           ),
                         ),
                       ],

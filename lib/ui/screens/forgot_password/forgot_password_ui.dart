@@ -28,29 +28,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark
-        ? AppColors.screenBackground
-        : AppColors.lightScreenBackground;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondaryText = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
-    final inputBg = isDark
-        ? AppColors.inputBackground
-        : AppColors.lightInputBackground;
-    final borderDefault = isDark
-        ? AppColors.borderDefault
-        : AppColors.lightBorderDefault;
-    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
-    final buttonText = isDark
-        ? AppColors.buttonText
-        : AppColors.lightButtonText;
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: colors.screenBackground,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
@@ -62,13 +43,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 children: [
                   IconButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    icon: Icon(Icons.arrow_back, color: primaryText),
+                    icon: Icon(Icons.arrow_back, color: colors.primaryText),
                   ),
                   const Expanded(child: SizedBox()),
                   Text(
                     'Forgot Password',
                     style: TextStyle(
-                      color: primaryText,
+                      color: colors.primaryText,
                       fontWeight: FontWeight.w700,
                       fontSize: 18,
                     ),
@@ -87,11 +68,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: isDark ? AppColors.cardDark : AppColors.lightCard,
+                    color: colors.card,
                     shape: BoxShape.circle,
                   ),
                   child: Center(
-                    child: Icon(Icons.lock_open, size: 48, color: buttonBg),
+                    child: Icon(Icons.lock_open, size: 48, color: colors.buttonBg),
                   ),
                 ),
               ),
@@ -102,7 +83,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child: Text(
                   'Enter your registered email or username below to receive a password reset link.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: secondaryText, fontSize: 14),
+                  style: TextStyle(color: colors.secondaryText, fontSize: 14),
                 ),
               ),
 
@@ -111,7 +92,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Text(
                 'Email or Username',
                 style: TextStyle(
-                  color: primaryText,
+                  color: colors.primaryText,
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
                 ),
@@ -121,19 +102,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
               TextField(
                 controller: _emailController,
-                style: TextStyle(color: primaryText),
+                style: TextStyle(color: colors.primaryText),
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: inputBg,
+                  fillColor: colors.inputBackground,
                   hintText: 'Enter your email or username',
-                  hintStyle: TextStyle(color: secondaryText),
+                  hintStyle: TextStyle(color: colors.secondaryText),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: borderDefault),
+                    borderSide: BorderSide(color: colors.borderDefault),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: AppColors.borderActive),
+                    borderSide: BorderSide(color: colors.borderActive),
                   ),
                 ),
               ),
@@ -146,9 +127,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child: PrimaryButton(
                   label: 'Send Reset Link',
                   onPressed: _onSend,
-                  backgroundColor: buttonBg,
-                  textColor: buttonText,
-                  shadowColor: AppColors.buttonShadow,
+                  backgroundColor: colors.buttonBg,
+                  textColor: colors.buttonText,
+                  shadowColor: colors.buttonShadow,
                 ),
               ),
             ],

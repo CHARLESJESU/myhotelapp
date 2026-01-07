@@ -7,6 +7,121 @@ import 'package:flutter/material.dart';
 /// here to keep styling consistent and themeable.
 ///
 /// Use [DarkModeColors] for dark theme and [LightModeColors] for light theme.
+///
+/// RECOMMENDED: Use `context.colors` extension for automatic theme-aware colors.
+/// Example: `final colors = context.colors;` then `colors.screenBackground`
+
+/// Extension to easily access theme-aware colors from BuildContext
+extension ThemeColors on BuildContext {
+  /// Returns true if current theme is dark mode
+  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+
+  /// Get the appropriate color palette based on current theme
+  AppColorPalette get colors =>
+      isDarkMode ? const AppColorPalette.dark() : const AppColorPalette.light();
+}
+
+/// Unified color palette that provides the correct colors based on theme.
+/// Use via `context.colors` extension.
+class AppColorPalette {
+  final Color screenBackground;
+  final Color inputBackground;
+  final Color card;
+  final Color appBarBg;
+  final Color borderDefault;
+  final Color borderActive;
+  final Color primaryText;
+  final Color secondaryText;
+  final Color disabledText;
+  final Color appBarText;
+  final Color appBarIcon;
+  final Color buttonBg;
+  final Color buttonText;
+  final Color buttonShadow;
+  final Color success;
+  final Color successBackground;
+  final Color successBg;
+  final Color successIcon;
+  final Color successText;
+  final Color uploadDashed;
+  final Color uploadIcon;
+  final Color uploadPlaceholder;
+  final Color tagNew;
+  final Color tagPreparing;
+  final Color tagDelivered;
+  final Color accentOrange;
+  final Color deleteText;
+  final Color adminDivider;
+  final Color bottomNavActive;
+  final Color bottomNavInactive;
+  final Color offer;
+
+  const AppColorPalette.dark()
+      : screenBackground = DarkModeColors.screenBackground,
+        inputBackground = DarkModeColors.inputBackground,
+        card = DarkModeColors.card,
+        appBarBg = DarkModeColors.appBarBg,
+        borderDefault = DarkModeColors.borderDefault,
+        borderActive = DarkModeColors.borderActive,
+        primaryText = DarkModeColors.primaryText,
+        secondaryText = DarkModeColors.secondaryText,
+        disabledText = DarkModeColors.disabledText,
+        appBarText = DarkModeColors.appBarText,
+        appBarIcon = DarkModeColors.appBarIcon,
+        buttonBg = DarkModeColors.buttonBg,
+        buttonText = DarkModeColors.buttonText,
+        buttonShadow = DarkModeColors.buttonShadow,
+        success = DarkModeColors.success,
+        successBackground = DarkModeColors.successBackground,
+        successBg = DarkModeColors.successBg,
+        successIcon = DarkModeColors.successIcon,
+        successText = DarkModeColors.successText,
+        uploadDashed = DarkModeColors.uploadDashed,
+        uploadIcon = DarkModeColors.uploadIcon,
+        uploadPlaceholder = DarkModeColors.uploadPlaceholder,
+        tagNew = DarkModeColors.tagNew,
+        tagPreparing = DarkModeColors.tagPreparing,
+        tagDelivered = DarkModeColors.tagDelivered,
+        accentOrange = DarkModeColors.accentOrange,
+        deleteText = DarkModeColors.deleteText,
+        adminDivider = DarkModeColors.adminDivider,
+        bottomNavActive = DarkModeColors.bottomNavActive,
+        bottomNavInactive = DarkModeColors.bottomNavInactive,
+        offer = DarkModeColors.accentOrange; // fallback for dark mode
+
+  const AppColorPalette.light()
+      : screenBackground = LightModeColors.screenBackground,
+        inputBackground = LightModeColors.inputBackground,
+        card = LightModeColors.card,
+        appBarBg = LightModeColors.appBarBg,
+        borderDefault = LightModeColors.borderDefault,
+        borderActive = LightModeColors.borderActive,
+        primaryText = LightModeColors.primaryText,
+        secondaryText = LightModeColors.secondaryText,
+        disabledText = LightModeColors.disabledText,
+        appBarText = LightModeColors.appBarText,
+        appBarIcon = LightModeColors.appBarIcon,
+        buttonBg = LightModeColors.buttonBg,
+        buttonText = LightModeColors.buttonText,
+        buttonShadow = LightModeColors.buttonShadow,
+        success = LightModeColors.success,
+        successBackground = LightModeColors.successBackground,
+        successBg = LightModeColors.successBg,
+        successIcon = LightModeColors.successIcon,
+        successText = LightModeColors.successText,
+        uploadDashed = LightModeColors.uploadDashed,
+        uploadIcon = LightModeColors.uploadIcon,
+        uploadPlaceholder = LightModeColors.uploadPlaceholder,
+        tagNew = LightModeColors.tagNew,
+        tagPreparing = LightModeColors.tagPreparing,
+        tagDelivered = LightModeColors.tagDelivered,
+        accentOrange = LightModeColors.accentOrange,
+        deleteText = LightModeColors.deleteText,
+        adminDivider = LightModeColors.adminDivider,
+        bottomNavActive = LightModeColors.bottomNavActive,
+        bottomNavInactive = LightModeColors.bottomNavInactive,
+        offer = LightModeColors.offer;
+}
 
 /// Dark mode color palette
 class DarkModeColors {

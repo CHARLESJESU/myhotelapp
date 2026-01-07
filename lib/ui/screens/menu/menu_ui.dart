@@ -18,39 +18,28 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark
-        ? AppColors.screenBackground
-        : AppColors.lightScreenBackground;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-    final secondaryText = isDark
-        ? AppColors.secondaryText
-        : AppColors.lightSecondaryText;
-    final cardBg = isDark ? AppColors.cardDark : AppColors.lightCard;
-    final buttonBg = isDark ? AppColors.buttonBg : AppColors.lightButtonBg;
+    final colors = context.colors;
 
     final categories = MenuDummyData.categories;
 
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: colors.screenBackground,
       appBar: AppBar(
-        backgroundColor: bg,
+        backgroundColor: colors.screenBackground,
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: Icon(Icons.arrow_back, color: primaryText),
+          icon: Icon(Icons.arrow_back, color: colors.primaryText),
         ),
         centerTitle: true,
         title: Text(
           'Menu',
-          style: TextStyle(color: primaryText, fontWeight: FontWeight.w700),
+          style: TextStyle(color: colors.primaryText, fontWeight: FontWeight.w700),
         ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.search, color: primaryText),
+            icon: Icon(Icons.search, color: colors.primaryText),
           ),
         ],
       ),
@@ -72,9 +61,9 @@ class _MenuScreenState extends State<MenuScreen> {
                     return MenuCategoryChip(
                       label: categories[i],
                       isSelected: selected,
-                      buttonBg: buttonBg,
-                      cardBg: cardBg,
-                      secondaryText: secondaryText,
+                      buttonBg: colors.buttonBg,
+                      cardBg: colors.card,
+                      secondaryText: colors.secondaryText,
                     );
                   },
                 ),
@@ -98,10 +87,10 @@ class _MenuScreenState extends State<MenuScreen> {
                       index: i,
                       hasCount: hasCount,
                       count: count,
-                      cardBg: cardBg,
-                      primaryText: primaryText,
-                      secondaryText: secondaryText,
-                      buttonBg: buttonBg,
+                      cardBg: colors.card,
+                      primaryText: colors.primaryText,
+                      secondaryText: colors.secondaryText,
+                      buttonBg: colors.buttonBg,
                       onAdd: () => setState(() => _counts[i] = 1),
                       onIncrement: () => setState(
                         () => _counts[i] = (_counts[i] ?? 0) + 1,
@@ -120,9 +109,9 @@ class _MenuScreenState extends State<MenuScreen> {
                 child: PrimaryButton(
                   label: 'Preview Order (3 items | \$45.50)',
                   onPressed: () {},
-                  backgroundColor: buttonBg,
-                  textColor: AppColors.buttonText,
-                  shadowColor: AppColors.buttonShadow,
+                  backgroundColor: colors.buttonBg,
+                  textColor: colors.buttonText,
+                  shadowColor: colors.buttonShadow,
                 ),
               ),
             ],

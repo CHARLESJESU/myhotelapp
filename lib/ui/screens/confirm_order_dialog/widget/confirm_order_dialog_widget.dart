@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../constants/app_colors.dart';
 
 /// Order item row widget for confirm dialog
 class OrderItemRow extends StatelessWidget {
