@@ -13,7 +13,7 @@ void main() async {
 
   // Initialize services
   Get.put(AuthService()); // Initialize AuthService
-  await DatabaseService.instance.database; // Initialize database
+  await DatabaseService.database; // Initialize database
 
   runApp(
     DevicePreview(
@@ -109,21 +109,13 @@ class _AuthCheckState extends State<AuthCheck> {
     // Wait for the widget to be mounted before navigating
     if (mounted) {
       if (storedUser != null) {
-        // User is logged in, check for last visited screen
-        final lastVisitedScreen = await authService.getLastVisitedScreen();
-
-        if (lastVisitedScreen != null) {
-          // Navigate to the last visited screen
-          Get.offAllNamed(lastVisitedScreen);
+        // User is logged in, navigate based on user type
+        if (storedUser.isRestaurantOwner) {
+          // Restaurant owner goes to admin screen
+          Get.offAllNamed(AppRoutes.adminOrderManagement);
         } else {
-          // No last visited screen recorded, navigate based on user type
-          if (storedUser.isRestaurantOwner) {
-            // Restaurant owner goes to admin screen
-            Get.offAllNamed(AppRoutes.adminOrderManagement);
-          } else {
-            // Regular user goes to main screen (home tab)
-            Get.offAllNamed(AppRoutes.main);
-          }
+          // Regular user goes to main screen (home tab)
+          Get.offAllNamed(AppRoutes.main);
         }
       } else {
         // User is not logged in, go to splash screen

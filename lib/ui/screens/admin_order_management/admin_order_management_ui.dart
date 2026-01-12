@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
-import '../../../services/auth_service.dart';
+
 import '../../router/routing.dart';
 import 'admin_order_management_dummydata.dart';
 import 'widget/admin_order_management_widget.dart';
@@ -19,13 +19,10 @@ class _AdminOrderManagementScreenState extends State<AdminOrderManagementScreen>
   void initState() {
     super.initState();
     // Record that the user is on the admin order management screen
-    _recordScreenVisit();
+
   }
 
-  void _recordScreenVisit() async {
-    final authService = Get.find<AuthService>();
-    await authService.setLastVisitedScreen(AppRoutes.adminOrderManagement);
-  }
+
 
   @override
   Widget build(BuildContext context) {

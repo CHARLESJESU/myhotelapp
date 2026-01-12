@@ -62,10 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         // Login successful - store user data in SQLite and update auth state
-        await AuthService.to.loginWithUserData(user, ''); // Assuming no token in response
-
-        // Clear any previous last visited screen since user just logged in
-        await AuthService.to.setLastVisitedScreen('');
+        await AuthService.to.loginWithUserData(user);
 
         AppToast.success(
           context,

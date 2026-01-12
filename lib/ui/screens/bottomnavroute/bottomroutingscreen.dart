@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import '../../../constants/app_colors.dart';
-import '../../../constants/responsive_helper.dart';
-import '../../../services/auth_service.dart';
-import '../../router/routing.dart';
+
 import '../home/home_ui.dart';
 import '../menu/menu_ui.dart';
 import '../cart/cart_ui.dart';
@@ -29,13 +27,10 @@ class _BottomRoutingScreenState extends State<BottomRoutingScreen> {
     _currentIndex = widget.initialIndex;
 
     // Record that the user is on the main screen
-    _recordScreenVisit();
+  
   }
 
-  void _recordScreenVisit() async {
-    final authService = Get.find<AuthService>();
-    await authService.setLastVisitedScreen(AppRoutes.main);
-  }
+
 
   void _onItemTapped(int index) {
     setState(() {

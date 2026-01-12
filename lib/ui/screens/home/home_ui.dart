@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _recordScreenVisit() async {
     final authService = Get.find<AuthService>();
-    await authService.setLastVisitedScreen(AppRoutes.home);
+
   }
 
   @override

@@ -5,7 +5,6 @@ import '../../../constants/responsive_helper.dart';
 import '../../widgets/primary_button.dart';
 import '../../api/api_calls.dart';
 import '../../widgets/app_toast.dart';
-import 'sign_up_dummydata.dart';
 
 class SignUpScreen extends StatefulWidget {
   final bool isDark;
@@ -23,9 +22,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
-
-  // Country code for phone number
-  String _selectedCountryCode = '+91'; // Default to India
 
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
@@ -219,8 +215,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     try {
       // Combine country code with phone number
-      String fullPhoneNumber =
-          _selectedCountryCode + _phoneController.text.trim();
+      String fullPhoneNumber = '+91' + _phoneController.text.trim();
 
       final result = await ApiCalls.signupApi(
         username: _usernameController.text.trim(),
@@ -544,48 +539,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               SizedBox(height: smallSpacing),
-              Row(
-                children: [
-                  Container(
-                    width: 100, // Fixed width for country code dropdown
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: colors.inputBackground,
-                      borderRadius: BorderRadius.horizontal(
-                        left: Radius.circular(12),
-                      ),
-                      border: Border.all(
-                        color: _phoneError == null
-                            ? colors.borderDefault
-                            : Colors.red,
-                      ),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: _selectedCountryCode,
-                        isExpanded: true,
-                        items: SignUpDummyData.countryCodes.map((String code) {
-                          return DropdownMenuItem<String>(
-                            value: code,
-                            child: Text(
-                              code,
-                              style: TextStyle(
-                                color: colors.primaryText,
-                                fontSize: subtitleFontSize,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedCountryCode = newValue!;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
+              TextField(
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
                       style: TextStyle(
@@ -597,40 +551,55 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _phoneError = _validatePhone(value);
                         });
                       },
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: colors.inputBackground,
-                        hintText: 'Enter your 10-digit phone number',
-                        hintStyle: TextStyle(
-                          color: colors.secondaryText,
-                          fontSize: subtitleFontSize * 0.9,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.horizontal(
-                            right: Radius.circular(12),
-                          ),
-                          borderSide: BorderSide(
-                            color: _phoneError == null
-                                ? colors.borderDefault
-                                : Colors.red,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.horizontal(
-                            right: Radius.circular(12),
-                          ),
-                          borderSide: BorderSide(
-                            color: _phoneError == null
-                                ? colors.borderActive
-                                : Colors.red,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: colors.inputBackground,
+                  hintText: 'Enter your 10-digit phone number',
+                  hintStyle: TextStyle(
+                    color: colors.secondaryText,
+                    fontSize: subtitleFontSize * 0.9,
+                  ),
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.only(left: 16, right: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '+91',
+                          style: TextStyle(
+                            color: colors.primaryText,
+                            fontSize: subtitleFontSize,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        errorText: _phoneError,
-                        errorStyle: TextStyle(color: Colors.red),
-                      ),
+                        SizedBox(width: 8),
+                        Container(
+                          height: 24,
+                          width: 1,
+                          color: colors.borderDefault,
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: _phoneError == null
+                          ? colors.borderDefault
+                          : Colors.red,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: _phoneError == null
+                          ? colors.borderActive
+                          : Colors.red,
+                    ),
+                  ),
+                  errorText: _phoneError,
+                  errorStyle: TextStyle(color: Colors.red),
+                ),
               ),
 
               SizedBox(height: smallSpacing * 1.5),

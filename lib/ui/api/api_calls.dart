@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:hostui/constants/app_strings.dart';
 import 'package:http/http.dart' as http;
 
 /// All API calls should be written here
@@ -9,7 +10,7 @@ class ApiCalls {
   ApiCalls._(); // private constructor (no object creation)
 
   /// Base URL
-  static const String _baseUrl = 'https://myfuture.fly.dev';
+  
 
   /// =========================
   /// SIGNUP API
@@ -27,7 +28,7 @@ class ApiCalls {
     required String pincode,
   }) async {
     try {
-      final uri = Uri.parse('$_baseUrl/taskapi/signup');
+      final uri = Uri.parse('${AppStrings.baseUrl}/taskapi/signup');
 
       final payload = {
         "username": username,
@@ -84,7 +85,7 @@ class ApiCalls {
     required String userpassword,
   }) async {
     try {
-      final uri = Uri.parse('$_baseUrl/taskapi/login');
+      final uri = Uri.parse('${AppStrings.baseUrl}/taskapi/login');
 
       final payload = {"useremail": useremail, "userpassword": userpassword};
 
@@ -159,7 +160,7 @@ class ApiCalls {
     required bool supportsDelivery,
   }) async {
     try {
-      final uri = Uri.parse('$_baseUrl/taskapi/adminrestaurentdetails');
+      final uri = Uri.parse('${AppStrings.baseUrl}/taskapi/adminrestaurentdetails');
 
       final payload = {
         "userid": userid,
