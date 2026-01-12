@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/responsive_helper.dart';
 import '../../widgets/primary_button.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -29,11 +30,74 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
+    // Get responsive values
+    final padding = ResponsiveHelper.getResponsivePaddingLTRB(
+      context,
+      leftPercentage: 0.06,
+      topPercentage: 0.03,
+      rightPercentage: 0.06,
+      bottomPercentage: 0.03,
+    );
+
+    final smallSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.015,
+      10,
+      16,
+    );
+    final mediumSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.025,
+      16,
+      24,
+    );
+    final largeSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.03,
+      20,
+      30,
+    );
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.025,
+      16,
+      22,
+    );
+    final subtitleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.02,
+      12,
+      16,
+    );
+    final labelFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.022,
+      14,
+      18,
+    );
+    final iconSize = ResponsiveHelper.getResponsiveIconSize(
+      context,
+      0.04,
+      36,
+      56,
+    );
+    final circleSize = ResponsiveHelper.getResponsiveWidth(
+      context,
+      0.25,
+      100,
+      140,
+    );
+
     return Scaffold(
       backgroundColor: colors.screenBackground,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+          padding: EdgeInsets.fromLTRB(
+            padding.left,
+            padding.top,
+            padding.right,
+            padding.bottom,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -50,63 +114,83 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     style: TextStyle(
                       color: colors.primaryText,
                       fontWeight: FontWeight.w700,
-                      fontSize: 18,
+                      fontSize: titleFontSize,
                     ),
                   ),
                   const Expanded(child: SizedBox()),
                   // placeholder to keep title centered
-                  const SizedBox(width: 48),
+                  SizedBox(
+                    width: ResponsiveHelper.getResponsiveWidth(
+                      context,
+                      0.1,
+                      30,
+                      60,
+                    ),
+                  ),
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: mediumSpacing),
 
               // lock icon
               Center(
                 child: Container(
-                  width: 120,
-                  height: 120,
+                  width: circleSize,
+                  height: circleSize,
                   decoration: BoxDecoration(
                     color: colors.card,
                     shape: BoxShape.circle,
                   ),
                   child: Center(
-                    child: Icon(Icons.lock_open, size: 48, color: colors.buttonBg),
+                    child: Icon(
+                      Icons.lock_open,
+                      size: iconSize,
+                      color: colors.buttonBg,
+                    ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: mediumSpacing),
 
               Center(
                 child: Text(
                   'Enter your registered email or username below to receive a password reset link.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: colors.secondaryText, fontSize: 14),
+                  style: TextStyle(
+                    color: colors.secondaryText,
+                    fontSize: subtitleFontSize,
+                  ),
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: largeSpacing),
 
               Text(
                 'Email or Username',
                 style: TextStyle(
                   color: colors.primaryText,
                   fontWeight: FontWeight.w700,
-                  fontSize: 16,
+                  fontSize: labelFontSize,
                 ),
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: smallSpacing),
 
               TextField(
                 controller: _emailController,
-                style: TextStyle(color: colors.primaryText),
+                style: TextStyle(
+                  color: colors.primaryText,
+                  fontSize: subtitleFontSize,
+                ),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: colors.inputBackground,
                   hintText: 'Enter your email or username',
-                  hintStyle: TextStyle(color: colors.secondaryText),
+                  hintStyle: TextStyle(
+                    color: colors.secondaryText,
+                    fontSize: subtitleFontSize * 0.9,
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: colors.borderDefault),
@@ -122,7 +206,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
               // bottom button
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: EdgeInsets.only(bottom: mediumSpacing),
                 child: PrimaryButton(
                   label: 'Send Reset Link',
                   onPressed: _onSend,

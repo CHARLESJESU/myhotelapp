@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/responsive_helper.dart';
 import '../../widgets/primary_button.dart';
 import 'menu_dummydata.dart';
 import 'widget/menu_widget.dart';
@@ -12,6 +13,14 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+
+    // Get responsive values
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.025,
+      16,
+      20,
+    );
 
     return Scaffold(
       backgroundColor: colors.screenBackground,
@@ -28,6 +37,7 @@ class MenuScreen extends StatelessWidget {
           style: TextStyle(
             color: colors.primaryText,
             fontWeight: FontWeight.w700,
+            fontSize: titleFontSize,
           ),
         ),
         actions: [
@@ -37,7 +47,7 @@ class MenuScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const SafeArea(child: MenuContent()),
+      body: SafeArea(child: MenuContent()),
     );
   }
 }
@@ -56,54 +66,112 @@ class _MenuContentState extends State<MenuContent> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final responsive = ResponsiveHelper;
     final categories = MenuDummyData.categories;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Title for bottom nav version
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: Text(
-              'Menu',
-              style: TextStyle(
-                color: colors.primaryText,
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
+    // Get responsive values
+    final padding = ResponsiveHelper.getResponsivePaddingLTRB(
+      context,
+      leftPercentage: 0.04,
+      topPercentage: 0.01,
+      rightPercentage: 0.04,
+      bottomPercentage: 0.02,
+    );
+
+    final smallSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.01,
+      8,
+      12,
+    );
+    final mediumSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.015,
+      12,
+      16,
+    );
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.03,
+      20,
+      28,
+    );
+    final categoryChipHeight = ResponsiveHelper.getResponsiveHeight(
+      context,
+      0.06,
+      40,
+      50,
+    );
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          padding.left,
+          padding.top,
+          padding.right,
+          padding.bottom,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Title for bottom nav version
+            Padding(
+              padding: EdgeInsets.only(bottom: mediumSpacing),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: colors.primaryText,
+                  fontSize: titleFontSize,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
-          ),
 
-          SizedBox(
-            height: 44,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 8),
-              itemBuilder: (context, i) {
-                final selected = i == 0;
-                return MenuCategoryChip(
-                  label: categories[i],
-                  isSelected: selected,
-                  buttonBg: colors.buttonBg,
-                  cardBg: colors.card,
-                  secondaryText: colors.secondaryText,
-                );
-              },
+            SizedBox(
+              height: categoryChipHeight,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: categories.length,
+                separatorBuilder: (context, index) =>
+                    SizedBox(width: smallSpacing),
+                itemBuilder: (context, i) {
+                  final selected = i == 0;
+                  return MenuCategoryChip(
+                    label: categories[i],
+                    isSelected: selected,
+                    buttonBg: colors.buttonBg,
+                    cardBg: colors.card,
+                    secondaryText: colors.secondaryText,
+                  );
+                },
+              ),
             ),
-          ),
 
-          const SizedBox(height: 12),
+            SizedBox(height: mediumSpacing),
 
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.78,
+                crossAxisSpacing: ResponsiveHelper.getResponsiveSpacing(
+                  context,
+                  0.02,
+                  10,
+                  16,
+                ),
+                mainAxisSpacing: ResponsiveHelper.getResponsiveSpacing(
+                  context,
+                  0.02,
+                  10,
+                  16,
+                ),
+                childAspectRatio: ResponsiveHelper.getResponsiveAspectRatio(
+                  context,
+                  0.78,
+                  0.6,
+                  1.0,
+                ),
               ),
               itemCount: 8,
               itemBuilder: (context, i) {
@@ -125,20 +193,20 @@ class _MenuContentState extends State<MenuContent> {
                 );
               },
             ),
-          ),
 
-          // sticky preview order bar
-          Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: PrimaryButton(
-              label: 'Preview Order (3 items | \$45.50)',
-              onPressed: () {},
-              backgroundColor: colors.buttonBg,
-              textColor: colors.buttonText,
-              shadowColor: colors.buttonShadow,
+            // sticky preview order bar
+            Padding(
+              padding: EdgeInsets.only(top: mediumSpacing),
+              child: PrimaryButton(
+                label: 'Preview Order (3 items | \$45.50)',
+                onPressed: () {},
+                backgroundColor: colors.buttonBg,
+                textColor: colors.buttonText,
+                shadowColor: colors.buttonShadow,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

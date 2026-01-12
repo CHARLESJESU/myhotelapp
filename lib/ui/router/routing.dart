@@ -15,6 +15,7 @@ import '../screens/add_recipe/add_recipe_ui.dart';
 import '../screens/track_order/track_order_ui.dart';
 import '../screens/order_history/order_history_ui.dart';
 import '../screens/admin_order_management/admin_order_management_ui.dart';
+import '../screens/splash/splash_screen.dart';
 
 /// App route names
 class AppRoutes {
@@ -32,12 +33,18 @@ class AppRoutes {
   static const String trackOrder = '/track-order';
   static const String orderHistory = '/order-history';
   static const String adminOrderManagement = '/admin-order-management';
+  static const String splash = '/splash';
 }
 
 /// App router for GetX navigation
 class AppRouter {
   /// GetX route pages
   static final routes = [
+    GetPage(
+      name: AppRoutes.splash,
+      page: () => const SplashScreen(),
+      transition: Transition.fadeIn,
+    ),
     GetPage(
       name: AppRoutes.login,
       page: () => const LoginScreen(),

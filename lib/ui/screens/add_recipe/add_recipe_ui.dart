@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../constants/app_strings.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/responsive_helper.dart';
 import '../../../services/theme_service.dart';
 import '../../widgets/image_picker_ui.dart';
 import '../../widgets/primary_button.dart';
@@ -64,11 +65,60 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
   Widget build(BuildContext context) {
     final colors = context.colors; // ✅ Clean theme-aware colors
 
+    // Get responsive values
+    final padding = ResponsiveHelper.getResponsivePaddingLTRB(
+      context,
+      leftPercentage: 0.04,
+      topPercentage: 0.015,
+      rightPercentage: 0.04,
+      bottomPercentage: 0.015,
+    );
+
+    final smallSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.01,
+      8,
+      12,
+    );
+    final mediumSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.015,
+      12,
+      16,
+    );
+    final largeSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.02,
+      16,
+      24,
+    );
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.025,
+      16,
+      20,
+    );
+    final labelFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.022,
+      14,
+      18,
+    );
+    final iconSize = ResponsiveHelper.getResponsiveIconSize(
+      context,
+      0.03,
+      30,
+      40,
+    );
+
     return Scaffold(
       backgroundColor: colors.screenBackground,
       appBar: AppBar(
         backgroundColor: colors.appBarBg,
-        title: Text('Add New Recipe', style: TextStyle(color: colors.primaryText)),
+        title: Text(
+          'Add New Recipe',
+          style: TextStyle(color: colors.primaryText, fontSize: titleFontSize),
+        ),
         leading: BackButton(color: colors.primaryText),
         elevation: 0,
       ),
@@ -76,12 +126,21 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+            final availableHeight =
+                constraints.maxHeight -
+                padding.top -
+                padding.bottom -
+                bottomInset;
+
             return SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + bottomInset),
+              padding: EdgeInsets.fromLTRB(
+                padding.left,
+                padding.top,
+                padding.right,
+                padding.bottom + bottomInset,
+              ),
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight - 16,
-                ),
+                constraints: BoxConstraints(minHeight: availableHeight),
                 child: IntrinsicHeight(
                   child: Form(
                     key: _formKey,
@@ -92,9 +151,12 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                         AppearanceSelector(
                           appearance: ThemeService.appearanceLabel,
                           onAppearanceChanged: (label) {
-                            if (label == 'Light') ThemeService.setThemeMode(ThemeMode.light);
-                            if (label == 'Dark') ThemeService.setThemeMode(ThemeMode.dark);
-                            if (label == 'System') ThemeService.setThemeMode(ThemeMode.system);
+                            if (label == 'Light')
+                              ThemeService.setThemeMode(ThemeMode.light);
+                            if (label == 'Dark')
+                              ThemeService.setThemeMode(ThemeMode.dark);
+                            if (label == 'System')
+                              ThemeService.setThemeMode(ThemeMode.system);
                           },
                         ),
 
@@ -106,21 +168,30 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                           ),
                           elevation: 0,
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: EdgeInsets.all(mediumSpacing),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 // Food Name
                                 TextFormField(
                                   controller: _nameController,
-                                  style: TextStyle(color: colors.primaryText),
+                                  style: TextStyle(
+                                    color: colors.primaryText,
+                                    fontSize: labelFontSize * 0.9,
+                                  ),
                                   decoration: InputDecoration(
                                     filled: true,
                                     fillColor: colors.inputBackground,
                                     labelText: 'Food Name',
-                                    labelStyle: TextStyle(color: colors.primaryText),
+                                    labelStyle: TextStyle(
+                                      color: colors.primaryText,
+                                      fontSize: labelFontSize,
+                                    ),
                                     hintText: 'e.g. Classic Margherita Pizza',
-                                    hintStyle: TextStyle(color: colors.secondaryText),
+                                    hintStyle: TextStyle(
+                                      color: colors.secondaryText,
+                                      fontSize: labelFontSize * 0.85,
+                                    ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                       borderSide: BorderSide(
@@ -139,20 +210,29 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                       ? 'Please enter food name'
                                       : null,
                                 ),
-                                const SizedBox(height: 12),
+                                SizedBox(height: smallSpacing),
 
                                 // Description
                                 TextFormField(
                                   controller: _descriptionController,
-                                  style: TextStyle(color: colors.primaryText),
+                                  style: TextStyle(
+                                    color: colors.primaryText,
+                                    fontSize: labelFontSize * 0.9,
+                                  ),
                                   decoration: InputDecoration(
                                     filled: true,
                                     fillColor: colors.inputBackground,
                                     labelText: 'Description (Optional)',
-                                    labelStyle: TextStyle(color: colors.primaryText),
+                                    labelStyle: TextStyle(
+                                      color: colors.primaryText,
+                                      fontSize: labelFontSize,
+                                    ),
                                     hintText:
                                         'e.g. Fresh basil, mozzarella, and a rich tomato sauce...',
-                                    hintStyle: TextStyle(color: colors.secondaryText),
+                                    hintStyle: TextStyle(
+                                      color: colors.secondaryText,
+                                      fontSize: labelFontSize * 0.85,
+                                    ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                       borderSide: BorderSide(
@@ -169,14 +249,17 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   minLines: 3,
                                   maxLines: 5,
                                 ),
-                                const SizedBox(height: 12),
+                                SizedBox(height: smallSpacing),
 
                                 // Mode & Category & Price & Image
                                 DropdownButtonFormField<String>(
                                   value: _mode,
                                   decoration: InputDecoration(
                                     labelText: 'Mode of Food',
-                                    labelStyle: TextStyle(color: colors.primaryText),
+                                    labelStyle: TextStyle(
+                                      color: colors.primaryText,
+                                      fontSize: labelFontSize,
+                                    ),
                                     filled: true,
                                     fillColor: colors.inputBackground,
                                     enabledBorder: OutlineInputBorder(
@@ -193,12 +276,20 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                     ),
                                   ),
                                   dropdownColor: colors.inputBackground,
-                                  style: TextStyle(color: colors.primaryText),
+                                  style: TextStyle(
+                                    color: colors.primaryText,
+                                    fontSize: labelFontSize * 0.9,
+                                  ),
                                   items: AddRecipeDummyData.modes
                                       .map(
                                         (m) => DropdownMenuItem(
                                           value: m,
-                                          child: Text(m),
+                                          child: Text(
+                                            m,
+                                            style: TextStyle(
+                                              fontSize: labelFontSize * 0.9,
+                                            ),
+                                          ),
                                         ),
                                       )
                                       .toList(),
@@ -207,12 +298,15 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                       ? 'Please select mode'
                                       : null,
                                 ),
-                                const SizedBox(height: 12),
+                                SizedBox(height: smallSpacing),
                                 DropdownButtonFormField<String>(
                                   value: _category,
                                   decoration: InputDecoration(
                                     labelText: 'Food Category',
-                                    labelStyle: TextStyle(color: colors.primaryText),
+                                    labelStyle: TextStyle(
+                                      color: colors.primaryText,
+                                      fontSize: labelFontSize,
+                                    ),
                                     filled: true,
                                     fillColor: colors.inputBackground,
                                     enabledBorder: OutlineInputBorder(
@@ -229,12 +323,20 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                     ),
                                   ),
                                   dropdownColor: colors.inputBackground,
-                                  style: TextStyle(color: colors.primaryText),
+                                  style: TextStyle(
+                                    color: colors.primaryText,
+                                    fontSize: labelFontSize * 0.9,
+                                  ),
                                   items: AddRecipeDummyData.categories
                                       .map(
                                         (c) => DropdownMenuItem(
                                           value: c,
-                                          child: Text(c),
+                                          child: Text(
+                                            c,
+                                            style: TextStyle(
+                                              fontSize: labelFontSize * 0.9,
+                                            ),
+                                          ),
                                         ),
                                       )
                                       .toList(),
@@ -244,20 +346,27 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                       ? 'Please select category'
                                       : null,
                                 ),
-                                const SizedBox(height: 12),
+                                SizedBox(height: smallSpacing),
                                 TextFormField(
                                   controller: _priceController,
                                   style: TextStyle(
                                     color: colors.primaryText,
+                                    fontSize: labelFontSize * 0.9,
                                   ),
                                   decoration: InputDecoration(
                                     filled: true,
                                     fillColor: colors.inputBackground,
                                     labelText: 'Price / Cost',
-                                    labelStyle: TextStyle(color: colors.primaryText),
+                                    labelStyle: TextStyle(
+                                      color: colors.primaryText,
+                                      fontSize: labelFontSize,
+                                    ),
                                     prefixText: '\$ ',
                                     hintText: '0.00',
-                                    hintStyle: TextStyle(color: colors.secondaryText),
+                                    hintStyle: TextStyle(
+                                      color: colors.secondaryText,
+                                      fontSize: labelFontSize * 0.85,
+                                    ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                       borderSide: BorderSide(
@@ -286,15 +395,16 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                     return null;
                                   },
                                 ),
-                                const SizedBox(height: 16),
+                                SizedBox(height: mediumSpacing),
                                 Text(
                                   'Upload Food Image (Optional)',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: colors.primaryText,
+                                    fontSize: labelFontSize,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                SizedBox(height: smallSpacing),
                                 ImagePickerUI(
                                   preview: _hasImage
                                       ? ClipRRect(
@@ -307,7 +417,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                             height: double.infinity,
                                             child: Icon(
                                               Icons.restaurant,
-                                              size: 36,
+                                              size: iconSize,
                                               color: colors.buttonText,
                                             ),
                                           ),
@@ -320,20 +430,20 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 16),
+                        SizedBox(height: mediumSpacing),
 
                         if (_showSuccess)
                           const SuccessMessage(
                             message: 'Success! Recipe added successfully.',
                           ),
 
-                        const SizedBox(height: 12),
+                        SizedBox(height: smallSpacing),
 
                         const Spacer(),
 
                         // primary action at bottom
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
+                          padding: EdgeInsets.only(bottom: mediumSpacing),
                           child: PrimaryButton(
                             label: AppStrings.addRecipe,
                             onPressed: _onAddRecipe,

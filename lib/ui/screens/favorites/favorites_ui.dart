@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/responsive_helper.dart';
 import 'favorites_dummydata.dart';
 import 'widget/favorites_widget.dart';
 
@@ -11,6 +12,14 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+
+    // Get responsive values
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.025,
+      16,
+      20,
+    );
 
     return Scaffold(
       backgroundColor: colors.screenBackground,
@@ -26,6 +35,7 @@ class FavoritesScreen extends StatelessWidget {
           style: TextStyle(
             color: colors.primaryText,
             fontWeight: FontWeight.bold,
+            fontSize: titleFontSize,
           ),
         ),
         centerTitle: true,
@@ -37,12 +47,18 @@ class FavoritesScreen extends StatelessWidget {
               style: TextStyle(
                 color: colors.buttonBg,
                 fontWeight: FontWeight.w600,
+                fontSize: ResponsiveHelper.getResponsiveFontSize(
+                  context,
+                  0.02,
+                  14,
+                  16,
+                ),
               ),
             ),
           ),
         ],
       ),
-      body: const SafeArea(child: FavoritesContent()),
+      body: SafeArea(child: FavoritesContent()),
     );
   }
 }
@@ -63,6 +79,40 @@ class _FavoritesContentState extends State<FavoritesContent> {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
+    // Get responsive values
+    final padding = ResponsiveHelper.getResponsivePaddingLTRB(
+      context,
+      leftPercentage: 0.04,
+      topPercentage: 0.01,
+      rightPercentage: 0.04,
+      bottomPercentage: 0.02,
+    );
+
+    final smallSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.01,
+      8,
+      12,
+    );
+    final mediumSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.015,
+      12,
+      16,
+    );
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.03,
+      20,
+      28,
+    );
+    final editFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.02,
+      14,
+      16,
+    );
+
     final filtered = _items
         .where(
           (it) => (it['title'] as String).toLowerCase().contains(
@@ -71,54 +121,77 @@ class _FavoritesContentState extends State<FavoritesContent> {
         )
         .toList();
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Title row for bottom nav version
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Favorites',
-                style: TextStyle(
-                  color: colors.primaryText,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Edit',
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          padding.left,
+          padding.top,
+          padding.right,
+          padding.bottom,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Title row for bottom nav version
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Favorites',
                   style: TextStyle(
-                    color: colors.buttonBg,
-                    fontWeight: FontWeight.w600,
+                    color: colors.primaryText,
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Edit',
+                    style: TextStyle(
+                      color: colors.buttonBg,
+                      fontWeight: FontWeight.w600,
+                      fontSize: editFontSize,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: mediumSpacing),
 
-          // search
-          FavoritesSearchBar(
-            inputBg: colors.inputBackground,
-            primaryText: colors.primaryText,
-            secondaryText: colors.secondaryText,
-            hintText: 'Search in favorites...',
-            onChanged: (v) => setState(() => _query = v),
-          ),
-          const SizedBox(height: 12),
+            // search
+            FavoritesSearchBar(
+              inputBg: colors.inputBackground,
+              primaryText: colors.primaryText,
+              secondaryText: colors.secondaryText,
+              hintText: 'Search in favorites...',
+              onChanged: (v) => setState(() => _query = v),
+            ),
+            SizedBox(height: mediumSpacing),
 
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 3 / 4,
+                crossAxisSpacing: ResponsiveHelper.getResponsiveSpacing(
+                  context,
+                  0.02,
+                  10,
+                  16,
+                ),
+                mainAxisSpacing: ResponsiveHelper.getResponsiveSpacing(
+                  context,
+                  0.02,
+                  10,
+                  16,
+                ),
+                childAspectRatio: ResponsiveHelper.getResponsiveAspectRatio(
+                  context,
+                  0.75,
+                  0.6,
+                  1.0,
+                ),
               ),
               itemCount: filtered.length,
               itemBuilder: (context, idx) {
@@ -134,8 +207,8 @@ class _FavoritesContentState extends State<FavoritesContent> {
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/responsive_helper.dart';
+import '../../../services/auth_service.dart';
+import '../../../services/database_service.dart';
 import '../../../services/theme_service.dart';
 import '../../router/routing.dart';
 import 'widget/profile_widget.dart';
@@ -25,6 +28,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
+    // Get responsive values
+    final padding = ResponsiveHelper.getResponsivePaddingLTRB(
+      context,
+      leftPercentage: 0.04,
+      topPercentage: 0.015,
+      rightPercentage: 0.04,
+      bottomPercentage: 0.02,
+    );
+
+    final smallSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.01,
+      8,
+      12,
+    );
+    final mediumSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.015,
+      12,
+      18,
+    );
+    final largeSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.02,
+      16,
+      28,
+    );
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.025,
+      16,
+      20,
+    );
+    final buttonHeight = ResponsiveHelper.getResponsiveButtonHeight(
+      context,
+      0.06,
+      48,
+      60,
+    );
     return Scaffold(
       backgroundColor: colors.screenBackground,
       appBar: AppBar(
@@ -37,11 +79,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
         title: Text(
           'My Profile',
-          style: TextStyle(color: colors.primaryText, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: colors.primaryText,
+            fontWeight: FontWeight.bold,
+            fontSize: titleFontSize,
+          ),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+        padding: EdgeInsets.fromLTRB(
+          padding.left,
+          padding.top,
+          padding.right,
+          padding.bottom,
+        ),
         child: Column(
           children: [
             // avatar + name
@@ -51,11 +102,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               primaryText: colors.primaryText,
               secondaryText: colors.secondaryText,
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: mediumSpacing),
             Expanded(
               child: ListView(
                 children: [
-                  ProfileSectionTitle(text: 'Account', primaryText: colors.primaryText),
+                  ProfileSectionTitle(
+                    text: 'Account',
+                    primaryText: colors.primaryText,
+                  ),
                   ProfileListRow(
                     label: 'Personal Information',
                     icon: Icons.person,
@@ -65,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     primaryText: colors.primaryText,
                     secondaryText: colors.secondaryText,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: smallSpacing),
                   ProfileListRow(
                     label: 'My Addresses',
                     icon: Icons.place,
@@ -75,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     primaryText: colors.primaryText,
                     secondaryText: colors.secondaryText,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: smallSpacing),
                   ProfileListRow(
                     label: 'Payment Methods',
                     icon: Icons.credit_card,
@@ -85,7 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     primaryText: colors.primaryText,
                     secondaryText: colors.secondaryText,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: smallSpacing),
                   GestureDetector(
                     onTap: () => Get.toNamed(AppRoutes.orderHistory),
                     child: ProfileListRow(
@@ -99,8 +153,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 16),
-                  ProfileSectionTitle(text: 'Settings', primaryText: colors.primaryText),
+                  SizedBox(height: mediumSpacing),
+                  ProfileSectionTitle(
+                    text: 'Settings',
+                    primaryText: colors.primaryText,
+                  ),
                   // notifications
                   NotificationToggleRow(
                     notifications: _notifications,
@@ -110,15 +167,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     btnText: colors.buttonText,
                     primaryText: colors.primaryText,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: smallSpacing),
                   // appearance
                   AppearanceRow(
                     appearance: ThemeService.appearanceLabel,
                     onAppearanceChanged: (label) {
                       // Apply global theme immediately
-                      if (label == 'Light') ThemeService.setThemeMode(ThemeMode.light);
-                      if (label == 'Dark') ThemeService.setThemeMode(ThemeMode.dark);
-                      if (label == 'System') ThemeService.setThemeMode(ThemeMode.system);
+                      if (label == 'Light')
+                        ThemeService.setThemeMode(ThemeMode.light);
+                      if (label == 'Dark')
+                        ThemeService.setThemeMode(ThemeMode.dark);
+                      if (label == 'System')
+                        ThemeService.setThemeMode(ThemeMode.system);
                     },
                     cardBg: colors.card,
                     btnBg: colors.buttonBg,
@@ -127,8 +187,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     isDark: context.isCurrentThemeDark,
                   ),
 
-                  const SizedBox(height: 16),
-                  ProfileSectionTitle(text: 'Support & Legal', primaryText: colors.primaryText),
+                  SizedBox(height: mediumSpacing),
+                  ProfileSectionTitle(
+                    text: 'Support & Legal',
+                    primaryText: colors.primaryText,
+                  ),
                   ProfileListRow(
                     label: 'Help & Support',
                     icon: Icons.help_outline,
@@ -138,7 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     primaryText: colors.primaryText,
                     secondaryText: colors.secondaryText,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: smallSpacing),
                   ProfileListRow(
                     label: 'About',
                     icon: Icons.info_outline,
@@ -149,10 +212,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     secondaryText: colors.secondaryText,
                   ),
 
-                  const SizedBox(height: 28),
+                  SizedBox(height: largeSpacing),
                   // logout button
                   SizedBox(
-                    height: 52,
+                    height: buttonHeight,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: colors.buttonBg,
@@ -161,14 +224,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        // Clear authentication state and user data
+                        await AuthService.to.logout();
+
+                        // Navigate to login screen
+                        Get.offAllNamed(AppRoutes.login);
+                      },
                       child: const Text(
                         'Log Out',
                         style: TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: mediumSpacing),
                 ],
               ),
             ),

@@ -1,16 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/responsive_helper.dart';
+import '../../../services/auth_service.dart';
 import '../../router/routing.dart';
 import 'admin_order_management_dummydata.dart';
 import 'widget/admin_order_management_widget.dart';
 
-class AdminOrderManagementScreen extends StatelessWidget {
+class AdminOrderManagementScreen extends StatefulWidget {
   const AdminOrderManagementScreen({super.key});
+
+  @override
+  State<AdminOrderManagementScreen> createState() => _AdminOrderManagementScreenState();
+}
+
+class _AdminOrderManagementScreenState extends State<AdminOrderManagementScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Record that the user is on the admin order management screen
+    _recordScreenVisit();
+  }
+
+  void _recordScreenVisit() async {
+    final authService = Get.find<AuthService>();
+    await authService.setLastVisitedScreen(AppRoutes.adminOrderManagement);
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+
+    // Get responsive values
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.025,
+      16,
+      20,
+    );
+    final tabFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.02,
+      14,
+      16,
+    );
 
     final orders = AdminOrderManagementDummyData.sampleOrders;
 
@@ -24,7 +57,11 @@ class AdminOrderManagementScreen extends StatelessWidget {
           centerTitle: true,
           title: Text(
             'Order Management',
-            style: TextStyle(color: colors.primaryText, fontWeight: FontWeight.w700),
+            style: TextStyle(
+              color: colors.primaryText,
+              fontWeight: FontWeight.w700,
+              fontSize: titleFontSize,
+            ),
           ),
           leading: IconButton(
             icon: Icon(Icons.search, color: colors.appBarIcon),
@@ -41,11 +78,25 @@ class AdminOrderManagementScreen extends StatelessWidget {
             indicatorColor: colors.bottomNavActive,
             labelColor: colors.bottomNavActive,
             unselectedLabelColor: colors.secondaryText,
-            tabs: const [
-              Tab(text: 'All'),
-              Tab(text: 'New'),
-              Tab(text: 'Preparing'),
-              Tab(text: 'Delivered'),
+            tabs: [
+              Tab(
+                child: Text('All', style: TextStyle(fontSize: tabFontSize)),
+              ),
+              Tab(
+                child: Text('New', style: TextStyle(fontSize: tabFontSize)),
+              ),
+              Tab(
+                child: Text(
+                  'Preparing',
+                  style: TextStyle(fontSize: tabFontSize),
+                ),
+              ),
+              Tab(
+                child: Text(
+                  'Delivered',
+                  style: TextStyle(fontSize: tabFontSize),
+                ),
+              ),
             ],
           ),
         ),
@@ -59,6 +110,12 @@ class AdminOrderManagementScreen extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.w700,
               color: colors.buttonText,
+              fontSize: ResponsiveHelper.getResponsiveFontSize(
+                context,
+                0.02,
+                14,
+                16,
+              ),
             ),
           ),
           backgroundColor: colors.buttonBg,
@@ -115,9 +172,13 @@ class AdminOrderManagementScreen extends StatelessWidget {
         ? orders
         : orders.where((o) => o.status == filter).toList();
     return ListView.separated(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(
+        ResponsiveHelper.getResponsiveSpacing(context, 0.02, 12, 20),
+      ),
       itemCount: list.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      separatorBuilder: (_, __) => SizedBox(
+        height: ResponsiveHelper.getResponsiveSpacing(context, 0.015, 8, 16),
+      ),
       itemBuilder: (context, idx) {
         final order = list[idx];
         return OrderCard(

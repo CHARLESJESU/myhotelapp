@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/responsive_helper.dart';
 import '../../router/routing.dart';
 import 'widget/track_order_widget.dart';
 
@@ -20,11 +21,49 @@ class TrackOrderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
+    // Get responsive values
+    final horizontalPadding = ResponsiveHelper.getResponsiveWidth(
+      context,
+      0.04,
+      16,
+      24,
+    );
+    final smallSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.01,
+      8,
+      12,
+    );
+    final mediumSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.015,
+      12,
+      18,
+    );
+    final largeSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.02,
+      16,
+      24,
+    );
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.035,
+      22,
+      30,
+    );
+    final subtitleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.022,
+      14,
+      18,
+    );
+
     return Scaffold(
       backgroundColor: colors.screenBackground,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -35,28 +74,31 @@ class TrackOrderScreen extends StatelessWidget {
                   onPressed: () => Get.back(),
                 ),
               ),
-              const SizedBox(height: 8),
-              
+              SizedBox(height: smallSpacing),
+
               // Delivery illustration
               const DeliveryIllustration(),
-              
-              const SizedBox(height: 18),
+
+              SizedBox(height: mediumSpacing),
               Text(
                 'Your Order is on its\nWay!',
                 style: TextStyle(
                   color: colors.primaryText,
-                  fontSize: 26,
+                  fontSize: titleFontSize,
                   fontWeight: FontWeight.w800,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: smallSpacing),
               Text(
                 'Thank you for your order. You can track its progress below.',
-                style: TextStyle(color: colors.secondaryText),
+                style: TextStyle(
+                  color: colors.secondaryText,
+                  fontSize: subtitleFontSize,
+                ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: mediumSpacing),
 
               // Order info card
               OrderInfoCard(
@@ -67,8 +109,8 @@ class TrackOrderScreen extends StatelessWidget {
                 secondaryText: colors.secondaryText,
               ),
 
-              const SizedBox(height: 18),
-              
+              SizedBox(height: mediumSpacing),
+
               // Track Order button
               TrackButton(
                 label: 'Track Order',
@@ -76,8 +118,8 @@ class TrackOrderScreen extends StatelessWidget {
                 textColor: colors.buttonText,
                 onPressed: () {},
               ),
-              
-              const SizedBox(height: 12),
+
+              SizedBox(height: smallSpacing),
               TextButton(
                 onPressed: () => Get.offNamed(AppRoutes.menu),
                 child: Text(
@@ -85,6 +127,7 @@ class TrackOrderScreen extends StatelessWidget {
                   style: TextStyle(
                     color: colors.buttonBg,
                     fontWeight: FontWeight.w700,
+                    fontSize: subtitleFontSize,
                   ),
                 ),
               ),

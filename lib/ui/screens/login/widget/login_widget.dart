@@ -18,16 +18,9 @@ class LoginIconCircle extends StatelessWidget {
       child: Container(
         width: 120,
         height: 120,
-        decoration: BoxDecoration(
-          color: cardBg,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: cardBg, shape: BoxShape.circle),
         child: Center(
-          child: Icon(
-            Icons.restaurant,
-            size: 48,
-            color: iconColor,
-          ),
+          child: Icon(Icons.restaurant, size: 48, color: iconColor),
         ),
       ),
     );

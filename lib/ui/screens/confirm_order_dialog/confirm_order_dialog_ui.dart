@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/responsive_helper.dart';
 
 class ConfirmOrderDialog extends StatelessWidget {
   final List<Map<String, dynamic>> items;
@@ -23,17 +24,81 @@ class ConfirmOrderDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
+    // Get responsive values
+    final horizontalPadding = ResponsiveHelper.getResponsiveWidth(
+      context,
+      0.06,
+      20,
+      32,
+    );
+    final verticalPadding = ResponsiveHelper.getResponsiveHeight(
+      context,
+      0.08,
+      40,
+      64,
+    );
+    final containerPadding = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.02,
+      16,
+      24,
+    );
+    final smallSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.01,
+      6,
+      10,
+    );
+    final mediumSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.015,
+      10,
+      16,
+    );
+    final largeSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.02,
+      16,
+      24,
+    );
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.025,
+      18,
+      22,
+    );
+    final subtitleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.02,
+      14,
+      16,
+    );
+    final totalFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.025,
+      16,
+      20,
+    );
+    final buttonHeight = ResponsiveHelper.getResponsiveButtonHeight(
+      context,
+      0.06,
+      48,
+      60,
+    );
     final total = subtotal + deliveryFee + taxes;
 
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding,
+        vertical: verticalPadding,
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: colors.card,
           borderRadius: BorderRadius.circular(16),
         ),
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(containerPadding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,24 +108,27 @@ class ConfirmOrderDialog extends StatelessWidget {
                 'Confirm Order',
                 style: TextStyle(
                   color: colors.primaryText,
-                  fontSize: 20,
+                  fontSize: titleFontSize,
                   fontWeight: FontWeight.w800,
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: smallSpacing),
             Center(
               child: Text(
                 'Please review your order before confirming.',
-                style: TextStyle(color: colors.secondaryText),
+                style: TextStyle(
+                  color: colors.secondaryText,
+                  fontSize: subtitleFontSize,
+                ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: mediumSpacing),
 
             // items
             ...items.map(
               (it) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: EdgeInsets.symmetric(vertical: smallSpacing),
                 child: Row(
                   children: [
                     Expanded(
@@ -69,21 +137,25 @@ class ConfirmOrderDialog extends StatelessWidget {
                         style: TextStyle(
                           color: colors.primaryText,
                           fontWeight: FontWeight.w600,
+                          fontSize: subtitleFontSize,
                         ),
                       ),
                     ),
                     Text(
                       '\$${((it['price'] as double) * (it['qty'] as int)).toStringAsFixed(2)}',
-                      style: TextStyle(color: colors.primaryText),
+                      style: TextStyle(
+                        color: colors.primaryText,
+                        fontSize: subtitleFontSize,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: mediumSpacing),
             const Divider(height: 1),
-            const SizedBox(height: 12),
+            SizedBox(height: mediumSpacing),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,6 +165,7 @@ class ConfirmOrderDialog extends StatelessWidget {
                   style: TextStyle(
                     color: colors.secondaryText,
                     fontWeight: FontWeight.w700,
+                    fontSize: subtitleFontSize,
                   ),
                 ),
                 Text(
@@ -100,13 +173,13 @@ class ConfirmOrderDialog extends StatelessWidget {
                   style: TextStyle(
                     color: colors.primaryText,
                     fontWeight: FontWeight.w800,
-                    fontSize: 18,
+                    fontSize: totalFontSize,
                   ),
                 ),
               ],
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: mediumSpacing),
             Row(
               children: [
                 Expanded(
@@ -119,16 +192,26 @@ class ConfirmOrderDialog extends StatelessWidget {
                       ),
                     ),
                     onPressed: () => Get.back(result: false),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.0),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: ResponsiveHelper.getResponsiveSpacing(
+                          context,
+                          0.015,
+                          10,
+                          16,
+                        ),
+                      ),
                       child: Text(
                         'Cancel',
-                        style: TextStyle(fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: subtitleFontSize,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: mediumSpacing),
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -139,11 +222,21 @@ class ConfirmOrderDialog extends StatelessWidget {
                       ),
                     ),
                     onPressed: () => Get.back(result: true),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.0),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: ResponsiveHelper.getResponsiveSpacing(
+                          context,
+                          0.015,
+                          10,
+                          16,
+                        ),
+                      ),
                       child: Text(
                         'Confirm Order',
-                        style: TextStyle(fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: subtitleFontSize,
+                        ),
                       ),
                     ),
                   ),

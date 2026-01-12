@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/responsive_helper.dart';
+import '../../../services/auth_service.dart';
+import '../../router/routing.dart';
 import '../home/home_ui.dart';
 import '../menu/menu_ui.dart';
 import '../cart/cart_ui.dart';
@@ -10,10 +14,7 @@ import '../favorites/favorites_ui.dart';
 class BottomRoutingScreen extends StatefulWidget {
   final int initialIndex;
 
-  const BottomRoutingScreen({
-    super.key,
-    this.initialIndex = 0,
-  });
+  const BottomRoutingScreen({super.key, this.initialIndex = 0});
 
   @override
   State<BottomRoutingScreen> createState() => _BottomRoutingScreenState();
@@ -26,6 +27,14 @@ class _BottomRoutingScreenState extends State<BottomRoutingScreen> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
+
+    // Record that the user is on the main screen
+    _recordScreenVisit();
+  }
+
+  void _recordScreenVisit() async {
+    final authService = Get.find<AuthService>();
+    await authService.setLastVisitedScreen(AppRoutes.main);
   }
 
   void _onItemTapped(int index) {
@@ -40,9 +49,12 @@ class _BottomRoutingScreenState extends State<BottomRoutingScreen> {
 
     return Scaffold(
       backgroundColor: colors.screenBackground,
-      body: SafeArea(
-        child: _getScreenWidget(_currentIndex),
-      ),
+
+      // IMPORTANT: Do NOT use extendBody for BottomNavigationBar
+      extendBody: false,
+
+      body: SafeArea(child: _getScreenWidget(_currentIndex)),
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
@@ -52,10 +64,7 @@ class _BottomRoutingScreenState extends State<BottomRoutingScreen> {
         unselectedItemColor: colors.bottomNavInactive,
         showUnselectedLabels: true,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long),
             label: 'Orders',

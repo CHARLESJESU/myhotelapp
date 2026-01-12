@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 
 /// Simple global theme service exposing a [ValueNotifier] to control the app's theme mode.
 class ThemeService {
-  static final ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.dark);
+  static final ValueNotifier<ThemeMode> themeMode = ValueNotifier(
+    ThemeMode.light,
+  );
 
   static ThemeMode get current => themeMode.value;
 
-  static bool get isDark => themeMode.value == ThemeMode.dark;
+  static bool get isLight => themeMode.value == ThemeMode.light;
 
   /// Returns human-readable label for current theme mode
   static String get appearanceLabel {
     switch (current) {
-      case ThemeMode.dark:
-        return 'Dark';
       case ThemeMode.light:
         return 'Light';
+      case ThemeMode.dark:
+        return 'Dark';
       default:
         return 'System';
     }
@@ -22,7 +24,10 @@ class ThemeService {
 
   static void setThemeMode(ThemeMode mode) => themeMode.value = mode;
 
-  static void setDark(bool dark) => themeMode.value = dark ? ThemeMode.dark : ThemeMode.light;
+  static void setDark(bool dark) =>
+      themeMode.value = dark ? ThemeMode.dark : ThemeMode.light;
 
-  static void toggle() => themeMode.value = themeMode.value == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+  static void toggle() => themeMode.value = themeMode.value == ThemeMode.dark
+      ? ThemeMode.light
+      : ThemeMode.dark;
 }

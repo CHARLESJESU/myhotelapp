@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/responsive_helper.dart';
 import 'order_history_dummydata.dart';
 import 'widget/order_history_widget.dart';
 
@@ -21,6 +22,34 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+
+    // Get responsive values
+    final padding = ResponsiveHelper.getResponsivePaddingLTRB(
+      context,
+      leftPercentage: 0.04,
+      topPercentage: 0.015,
+      rightPercentage: 0.04,
+      bottomPercentage: 0.02,
+    );
+
+    final smallSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.01,
+      8,
+      12,
+    );
+    final mediumSpacing = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      0.015,
+      12,
+      16,
+    );
+    final titleFontSize = ResponsiveHelper.getResponsiveFontSize(
+      context,
+      0.025,
+      18,
+      22,
+    );
 
     final filtered = orders
         .where(
@@ -46,12 +75,21 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
         ),
         title: Text(
           'Order History',
-          style: TextStyle(color: colors.primaryText, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: colors.primaryText,
+            fontWeight: FontWeight.bold,
+            fontSize: titleFontSize,
+          ),
         ),
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+        padding: EdgeInsets.fromLTRB(
+          padding.left,
+          padding.top,
+          padding.right,
+          padding.bottom,
+        ),
         child: Column(
           children: [
             OrderHistorySearchBar(
@@ -61,7 +99,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               onChanged: (v) => setState(() => query = v),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: mediumSpacing),
 
             // segmented control
             OrderHistoryFilterTabs(
@@ -70,15 +108,16 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               buttonBg: colors.buttonBg,
               buttonText: colors.buttonText,
               secondaryText: colors.secondaryText,
-              onFilterChanged: (newFilter) => setState(() => filter = newFilter),
+              onFilterChanged: (newFilter) =>
+                  setState(() => filter = newFilter),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: mediumSpacing),
 
             Expanded(
               child: ListView.separated(
                 itemCount: filtered.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                separatorBuilder: (_, __) => SizedBox(height: mediumSpacing),
                 itemBuilder: (context, idx) {
                   final o = filtered[idx];
                   final isDelivered = o['status'] == 'Delivered';
