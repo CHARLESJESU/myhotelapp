@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
+import '../../../language/language_controller.dart';
 import '../../widgets/primary_button.dart';
 import 'menu_dummydata.dart';
 import 'widget/menu_widget.dart';
@@ -33,7 +34,7 @@ class MenuScreen extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Menu',
+          Get.find<LanguageController>().tr('menu'),
           style: TextStyle(
             color: colors.primaryText,
             fontWeight: FontWeight.w700,
@@ -118,7 +119,7 @@ class _MenuContentState extends State<MenuContent> {
             Padding(
               padding: EdgeInsets.only(bottom: mediumSpacing),
               child: Text(
-                'Menu',
+                Get.find<LanguageController>().tr('menu'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontSize: titleFontSize,
@@ -137,7 +138,9 @@ class _MenuContentState extends State<MenuContent> {
                 itemBuilder: (context, i) {
                   final selected = i == 0;
                   return MenuCategoryChip(
-                    label: categories[i],
+                    label: Get.find<LanguageController>().tr(
+                      categories[i].toLowerCase(),
+                    ),
                     isSelected: selected,
                     buttonBg: colors.buttonBg,
                     cardBg: colors.card,
@@ -198,7 +201,7 @@ class _MenuContentState extends State<MenuContent> {
             Padding(
               padding: EdgeInsets.only(top: mediumSpacing),
               child: PrimaryButton(
-                label: 'Preview Order (3 items | \$45.50)',
+                label: Get.find<LanguageController>().tr('preview_order'),
                 onPressed: () {},
                 backgroundColor: colors.buttonBg,
                 textColor: colors.buttonText,

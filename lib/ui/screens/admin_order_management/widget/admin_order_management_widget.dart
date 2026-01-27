@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../constants/app_colors.dart';
+import '../../../../language/language_controller.dart';
 import '../admin_order_management_dummydata.dart';
 
 /// Order card widget for displaying order details
@@ -27,6 +29,19 @@ class OrderCard extends StatelessWidget {
         return AppColors.tagDelivered;
       default:
         return AppColors.tagPreparing;
+    }
+  }
+
+  String _getLocalizedStatus(String status) {
+    switch (status) {
+      case 'New':
+        return Get.find<LanguageController>().tr('new');
+      case 'Preparing':
+        return Get.find<LanguageController>().tr('preparing');
+      case 'Delivered':
+        return Get.find<LanguageController>().tr('delivered');
+      default:
+        return status;
     }
   }
 
@@ -72,7 +87,7 @@ class OrderCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
-                      order.status,
+                      _getLocalizedStatus(order.status),
                       style: const TextStyle(
                         color: AppColors.buttonText,
                         fontWeight: FontWeight.w700,
@@ -170,6 +185,19 @@ class StatusTag extends StatelessWidget {
     }
   }
 
+  String _getLocalizedStatus(String status) {
+    switch (status) {
+      case 'New':
+        return Get.find<LanguageController>().tr('new');
+      case 'Preparing':
+        return Get.find<LanguageController>().tr('preparing');
+      case 'Delivered':
+        return Get.find<LanguageController>().tr('delivered');
+      default:
+        return status;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -179,7 +207,7 @@ class StatusTag extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
-        status,
+        _getLocalizedStatus(status),
         style: const TextStyle(
           color: AppColors.buttonText,
           fontWeight: FontWeight.w700,

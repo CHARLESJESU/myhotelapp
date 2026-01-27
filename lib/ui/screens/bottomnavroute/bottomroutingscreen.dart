@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
-
+import '../../../language/language_controller.dart';
 import '../home/home_ui.dart';
 import '../menu/menu_ui.dart';
 import '../cart/cart_ui.dart';
@@ -58,19 +58,22 @@ class _BottomRoutingScreenState extends State<BottomRoutingScreen> {
         selectedItemColor: colors.bottomNavActive,
         unselectedItemColor: colors.bottomNavInactive,
         showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: Get.find<LanguageController>().tr('home'),
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long),
-            label: 'Orders',
+            label: Get.find<LanguageController>().tr('orders'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
+            label: Get.find<LanguageController>().tr('cart'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
-            label: 'Favorites',
+            label: Get.find<LanguageController>().tr('favorites'),
           ),
         ],
       ),

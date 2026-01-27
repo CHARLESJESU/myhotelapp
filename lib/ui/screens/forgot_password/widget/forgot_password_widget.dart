@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../constants/app_colors.dart';
+import '../../../../language/language_controller.dart';
 
 /// Lock icon circle widget for forgot password screen
 class LockIconCircle extends StatelessWidget {
@@ -53,7 +55,7 @@ class ForgotPasswordTextField extends StatelessWidget {
       decoration: InputDecoration(
         filled: true,
         fillColor: inputBg,
-        hintText: 'Enter your email or username',
+        hintText: Get.find<LanguageController>().tr('enter_email_username'),
         hintStyle: TextStyle(color: secondaryText),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

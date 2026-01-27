@@ -1,102 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../constants/app_colors.dart';
+import '../../../../language/language_controller.dart';
 
-/// Appearance selector widget for switching between Light, Dark, and System themes
-class AppearanceSelector extends StatelessWidget {
-  final String appearance;
-  final ValueChanged<String> onAppearanceChanged;
+/// Image picker UI widget for uploading food images
+class ImagePickerUI extends StatelessWidget {
+  final Widget? preview;
+  final VoidCallback onUpload;
 
-  const AppearanceSelector({
+  const ImagePickerUI({
     super.key,
-    required this.appearance,
-    required this.onAppearanceChanged,
+    this.preview,
+    required this.onUpload,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final primaryText = isDark
-        ? AppColors.primaryText
-        : AppColors.lightPrimaryText;
-
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Text(
-            'Appearance',
-            style: TextStyle(
-              color: primaryText,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const Spacer(),
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: isDark
-                  ? AppColors.cardDark
-                  : AppColors.lightCard,
+      height: 120,
+      decoration: BoxDecoration(
+        color: AppColors.uploadPlaceholder,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: context.colors.borderDefault,
+          width: 1,
+        ),
+      ),
+      child: preview != null
+          ? preview
+          : InkWell(
               borderRadius: BorderRadius.circular(8),
+              onTap: onUpload,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.camera_alt,
+                    color: context.colors.secondaryText,
+                    size: 32,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    Get.find<LanguageController>().tr('tap_to_upload_image'),
+                    style: TextStyle(
+                      color: context.colors.secondaryText,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Row(
-              children: [
-                _AppearanceOption(
-                  label: 'Light',
-                  isSelected: appearance == 'Light',
-                  onTap: () => onAppearanceChanged('Light'),
-                ),
-                _AppearanceOption(
-                  label: 'Dark',
-                  isSelected: appearance == 'Dark',
-                  onTap: () => onAppearanceChanged('Dark'),
-                ),
-                _AppearanceOption(
-                  label: 'System',
-                  isSelected: appearance == 'System',
-                  onTap: () => onAppearanceChanged('System'),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AppearanceOption extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _AppearanceOption({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.buttonBg : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected
-                ? AppColors.buttonText
-                : AppColors.secondaryText,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
     );
   }
 }

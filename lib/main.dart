@@ -6,7 +6,11 @@ import 'constants/app_colors.dart';
 import 'services/auth_service.dart';
 import 'services/database_service.dart';
 import 'services/theme_service.dart';
+import 'language/language_service.dart';
+import 'language/language_controller.dart';
 import 'ui/router/routing.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Required for async operations
@@ -14,6 +18,7 @@ void main() async {
   // Initialize services
   Get.put(AuthService()); // Initialize AuthService
   await DatabaseService.database; // Initialize database
+  await LanguageService.initialize(); // Initialize Language Service
 
   runApp(
     DevicePreview(
@@ -32,54 +37,65 @@ class MyApp extends StatelessWidget {
     // ✅ CHANGED: Toastification must wrap the entire app
     return ToastificationWrapper(
       // <-- CHANGED
-      child: ValueListenableBuilder<ThemeMode>(
-        valueListenable: ThemeService.themeMode,
-        builder: (context, mode, _) {
-          return GetMaterialApp(
-            title: 'Eatsexpress',
-            debugShowCheckedModeBanner: false,
+      child: GetBuilder<LanguageController>(
+        init: Get.find<LanguageController>(),
+        builder: (langCtrl) {
+          return ValueListenableBuilder<ThemeMode>(
+            valueListenable: ThemeService.themeMode,
+            builder: (context, mode, child) {
+              return GetMaterialApp(
+                key: ValueKey(langCtrl.locale.value.toString()), // Force rebuild when locale changes
+                title: Get.find<LanguageController>().tr('app_title'),
+                debugShowCheckedModeBanner: false,
 
-            // ✅ Required for DevicePreview
-            useInheritedMediaQuery: true,
-            locale: DevicePreview.locale(context),
-            builder: DevicePreview.appBuilder,
+                // ✅ Required for DevicePreview
+                useInheritedMediaQuery: true,
+                locale: langCtrl.locale.value,
+                builder: DevicePreview.appBuilder,
 
-            theme: ThemeData(
-              fontFamily: 'Poppins',
-              useMaterial3: true,
-              brightness: Brightness.light,
-              primaryColor: AppColors.accentOrange,
-              scaffoldBackgroundColor: AppColors.lightScreenBackground,
-              appBarTheme: const AppBarTheme(
-                backgroundColor: AppColors.lightScreenBackground,
-                foregroundColor: AppColors.lightPrimaryText,
-                elevation: 0,
-              ),
-              textTheme: const TextTheme(
-                bodyMedium: TextStyle(color: AppColors.lightPrimaryText),
-              ),
-            ),
+                theme: ThemeData(
+                  textTheme: GoogleFonts.poppinsTextTheme(),
+                  useMaterial3: true,
+                  brightness: Brightness.light,
+                  primaryColor: AppColors.accentOrange,
+                  scaffoldBackgroundColor: AppColors.lightScreenBackground,
+                  appBarTheme: const AppBarTheme(
+                    backgroundColor: AppColors.lightScreenBackground,
+                    foregroundColor: AppColors.lightPrimaryText,
+                    elevation: 0,
+                  ),
+                ),
 
-            darkTheme: ThemeData(
-              fontFamily: 'Poppins',
-              useMaterial3: true,
-              brightness: Brightness.dark,
-              primaryColor: AppColors.accentOrange,
-              scaffoldBackgroundColor: AppColors.screenBackground,
-              appBarTheme: const AppBarTheme(
-                backgroundColor: AppColors.screenBackground,
-                foregroundColor: AppColors.primaryText,
-                elevation: 0,
-              ),
-              textTheme: const TextTheme(
-                bodyMedium: TextStyle(color: AppColors.primaryText),
-              ),
-            ),
+                darkTheme: ThemeData(
+                  textTheme: GoogleFonts.poppinsTextTheme(),
+                  useMaterial3: true,
+                  brightness: Brightness.dark,
+                  primaryColor: AppColors.accentOrange,
+                  scaffoldBackgroundColor: AppColors.screenBackground,
+                  appBarTheme: const AppBarTheme(
+                    backgroundColor: AppColors.screenBackground,
+                    foregroundColor: AppColors.primaryText,
+                    elevation: 0,
+                  ),
+                ),
 
-            themeMode: mode,
-            // Use a custom initial route that checks auth state
-            home: const AuthCheck(),
-            getPages: AppRouter.routes,
+                themeMode: mode,
+                // Use a custom initial route that checks auth state
+                home: const AuthCheck(),
+                getPages: AppRouter.routes,
+
+                // Localization support
+                supportedLocales: const [
+                  Locale('en'), // English
+                  Locale('ta'), // Tamil
+                ],
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+              );
+            },
           );
         },
       ),
@@ -133,7 +149,7 @@ class _AuthCheckState extends State<AuthCheck> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.hotel,
+              Icons.restaurant_menu,
               size: 60,
               color: Theme.of(context).primaryColor,
             ),

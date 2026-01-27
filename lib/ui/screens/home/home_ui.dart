@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
 import '../../../services/auth_service.dart';
+import '../../../language/language_controller.dart';
 import '../../router/routing.dart';
 import 'home_dummydata.dart';
 import 'widget/home_widget.dart';
@@ -126,7 +127,7 @@ class _HomeContentState extends State<HomeContent> {
                 SizedBox(width: smallSpacing),
                 Expanded(
                   child: Text(
-                    'Delivering to Home',
+                    Get.find<LanguageController>().tr('delivering_to_home'),
                     style: TextStyle(
                       color: colors.secondaryText,
                       fontWeight: FontWeight.w600,
@@ -147,7 +148,7 @@ class _HomeContentState extends State<HomeContent> {
 
             // greeting
             Text(
-              'Good morning, Alex!',
+              Get.find<LanguageController>().tr('good_morning'),
               style: TextStyle(
                 color: colors.primaryText,
                 fontSize: greetingFontSize,
@@ -213,7 +214,7 @@ class _HomeContentState extends State<HomeContent> {
 
             // Featured Dishes horizontal list
             Text(
-              'Featured Dishes',
+              Get.find<LanguageController>().tr('featured_dishes'),
               style: TextStyle(
                 color: colors.primaryText,
                 fontWeight: FontWeight.w700,
@@ -240,7 +241,7 @@ class _HomeContentState extends State<HomeContent> {
 
             // Restaurants list
             Text(
-              'Restaurants Near You',
+              Get.find<LanguageController>().tr('restaurants_near_you'),
               style: TextStyle(
                 color: colors.primaryText,
                 fontWeight: FontWeight.w700,

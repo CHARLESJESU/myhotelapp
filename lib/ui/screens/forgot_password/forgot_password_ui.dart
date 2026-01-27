@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
+import '../../../language/language_controller.dart';
 import '../../widgets/primary_button.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -108,24 +109,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     onPressed: () => Get.back(),
                     icon: Icon(Icons.arrow_back, color: colors.primaryText),
                   ),
-                  const Expanded(child: SizedBox()),
-                  Text(
-                    'Forgot Password',
-                    style: TextStyle(
-                      color: colors.primaryText,
-                      fontWeight: FontWeight.w700,
-                      fontSize: titleFontSize,
+                  Expanded(
+                    child: Text(
+                      Get.find<LanguageController>().tr('forgot_password_title'),
+                      style: TextStyle(
+                        color: colors.primaryText,
+                        fontWeight: FontWeight.w700,
+                        fontSize: titleFontSize,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  const Expanded(child: SizedBox()),
-                  // placeholder to keep title centered
-                  SizedBox(
-                    width: ResponsiveHelper.getResponsiveWidth(
-                      context,
-                      0.1,
-                      30,
-                      60,
-                    ),
+                  const SizedBox(
+                    width: 48, // Space for back button
                   ),
                 ],
               ),
@@ -155,7 +151,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
               Center(
                 child: Text(
-                  'Enter your registered email or username below to receive a password reset link.',
+                  Get.find<LanguageController>().tr('forgot_password_subtitle'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: colors.secondaryText,
@@ -167,7 +163,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               SizedBox(height: largeSpacing),
 
               Text(
-                'Email or Username',
+                Get.find<LanguageController>().tr('email_or_username'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontWeight: FontWeight.w700,
@@ -186,7 +182,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: colors.inputBackground,
-                  hintText: 'Enter your email or username',
+                  hintText: Get.find<LanguageController>().tr('enter_email_username'),
                   hintStyle: TextStyle(
                     color: colors.secondaryText,
                     fontSize: subtitleFontSize * 0.9,
@@ -208,7 +204,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Padding(
                 padding: EdgeInsets.only(bottom: mediumSpacing),
                 child: PrimaryButton(
-                  label: 'Send Reset Link',
+                  label: Get.find<LanguageController>().tr('send_reset_link'),
                   onPressed: _onSend,
                   backgroundColor: colors.buttonBg,
                   textColor: colors.buttonText,

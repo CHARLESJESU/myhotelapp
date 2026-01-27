@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
+import '../../../language/language_controller.dart';
 import '../../widgets/primary_button.dart';
 import '../../api/api_calls.dart';
 import '../../widgets/app_toast.dart';
@@ -37,16 +38,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Validation methods
   String? _validateName(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Name is required';
+      return Get.find<LanguageController>().tr('name_required');
     }
 
     // Check if name contains only alphabets and spaces
     if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
-      return 'Only alphabets are allowed';
+      return Get.find<LanguageController>().tr('alphabets_only');
     }
 
     if (value.trim().length < 2) {
-      return 'Name must be at least 2 characters';
+      return Get.find<LanguageController>().tr('name_min_chars');
     }
 
     return null;
@@ -54,12 +55,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Email is required';
+      return Get.find<LanguageController>().tr('email_required');
     }
 
     // Basic email validation
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Please enter a valid email';
+      return Get.find<LanguageController>().tr('valid_email_required');
     }
 
     return null;
@@ -67,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   String? _validatePhone(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Phone number is required';
+      return Get.find<LanguageController>().tr('phone_required');
     }
 
     // Remove any non-digit characters except +
@@ -75,8 +76,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     // Check if it starts with + and has 10 digits after country code
     // For simplicity, we'll check if it has 10-13 digits total (including country code)
-    if (!RegExp(r'^\+?\d{10,15}$').hasMatch(cleanValue)) {
-      return 'Please enter a valid phone number with country code';
+    if (!RegExp(r'^\+?\d{10}$').hasMatch(cleanValue)) {
+      return Get.find<LanguageController>().tr('valid_phone_required');
     }
 
     return null;
@@ -84,20 +85,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   String? _validateUsername(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Username is required';
+      return Get.find<LanguageController>().tr('username_required');
     }
 
     if (value.length < 3) {
-      return 'Username must be at least 3 characters';
+      return Get.find<LanguageController>().tr('username_min_chars');
     }
 
     if (value.length > 20) {
-      return 'Username must be less than 20 characters';
+      return Get.find<LanguageController>().tr('username_max_chars');
     }
 
     // Check if username contains only lowercase letters, numbers, underscores, and hyphens
     if (!RegExp(r'^[a-z0-9_-]+$').hasMatch(value)) {
-      return 'Username can only contain lowercase letters, numbers, underscores, and hyphens';
+      return Get.find<LanguageController>().tr('username_invalid_chars');
     }
 
     return null;
@@ -105,16 +106,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Password is required';
+      return Get.find<LanguageController>().tr('password_required');
     }
 
     if (value.length < 6) {
-      return 'Password must be at least 6 characters';
+      return Get.find<LanguageController>().tr('password_min_chars');
     }
 
     // Check for at least one uppercase, one lowercase, one number
     if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)').hasMatch(value)) {
-      return 'Password must contain uppercase, lowercase, and number';
+      return Get.find<LanguageController>().tr('password_requirements');
     }
 
     return null;
@@ -122,11 +123,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   String? _validateAddress(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Address is required';
+      return Get.find<LanguageController>().tr('address_required');
     }
 
     if (value.length < 10) {
-      return 'Please enter a complete address';
+      return Get.find<LanguageController>().tr('complete_address_required');
     }
 
     return null;
@@ -159,9 +160,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   String _getPasswordStrengthLabel(double strength) {
     if (strength == 0.0) return '';
-    if (strength < 0.33) return 'Weak';
-    if (strength < 0.66) return 'Medium';
-    return 'Strong';
+    if (strength < 0.33) return Get.find<LanguageController>().tr('weak');
+    if (strength < 0.66) return Get.find<LanguageController>().tr('medium');
+    return Get.find<LanguageController>().tr('strong');
   }
 
   void _onSignUp() async {
@@ -172,7 +173,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     if (_passwordController.text != _confirmController.text) {
       setState(() {
-        _confirmError = 'Passwords do not match.';
+        _confirmError = Get.find<LanguageController>().tr('passwords_not_match');
       });
       return;
     }
@@ -203,8 +204,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       // Show validation error message using toastification
       AppToast.warning(
         context,
-        title: 'Validation Error',
-        description: 'Please fix all validation errors before submitting.',
+        title: Get.find<LanguageController>().tr('validation_error'),
+        description: Get.find<LanguageController>().tr('fix_validation_errors'),
       );
       return;
     }
@@ -234,8 +235,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // Show success message using toastification
         AppToast.success(
           context,
-          title: 'Success',
-          description: 'Account created successfully!',
+          title: Get.find<LanguageController>().tr('success'),
+          description: Get.find<LanguageController>().tr('account_created_success'),
         );
 
         // Navigate to login page after a delay to show success message
@@ -245,20 +246,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
       } else {
         // Show error message using toastification
         String errorMessage =
-            result['errorMessage'] ?? 'Signup failed. Please try again.';
+            result['errorMessage'] ?? Get.find<LanguageController>().tr('signup_failed_retry');
         if (result['statusCode'] != null && result['statusCode'] != 0) {
           errorMessage =
-              'Error ${result['statusCode']}: ${result['data']['message'] ?? 'Signup failed'}';
+              Get.find<LanguageController>().tr('error_with_status').replaceAll('{status}', result['statusCode'].toString()).replaceAll('{message}', result['data']['message'] ?? Get.find<LanguageController>().tr('signup_failed'));
         }
 
-        AppToast.error(context, title: 'Error', description: errorMessage);
+        AppToast.error(context, title: Get.find<LanguageController>().tr('error'), description: errorMessage);
       }
     } catch (e) {
       // Show error message using toastification
       AppToast.error(
         context,
-        title: 'Error',
-        description: 'An unexpected error occurred: $e',
+        title: Get.find<LanguageController>().tr('error'),
+        description: Get.find<LanguageController>().tr('unexpected_error').replaceAll('{error}', e.toString()),
       );
     } finally {
       setState(() {
@@ -366,23 +367,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onPressed: () => Get.back(),
                     icon: Icon(Icons.arrow_back, color: colors.primaryText),
                   ),
-                  const Expanded(child: SizedBox()),
-                  Text(
-                    'Create Your Account',
-                    style: TextStyle(
-                      color: colors.primaryText,
-                      fontWeight: FontWeight.w800,
-                      fontSize: titleFontSize,
+                  Expanded(
+                    child: Text(
+                      Get.find<LanguageController>().tr('create_your_account'),
+                      style: TextStyle(
+                        color: colors.primaryText,
+                        fontWeight: FontWeight.w800,
+                        fontSize: titleFontSize,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  const Expanded(child: SizedBox()),
-                  SizedBox(
-                    width: ResponsiveHelper.getResponsiveWidth(
-                      context,
-                      0.1,
-                      30,
-                      60,
-                    ),
+                  const SizedBox(
+                    width: 48, // Space for back button
                   ),
                 ],
               ),
@@ -411,7 +408,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               Center(
                 child: Text(
-                  'Sign up to start ordering your favorite food.',
+                  Get.find<LanguageController>().tr('sign_up_subtitle'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: colors.secondaryText,
@@ -424,7 +421,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               // Full Name
               Text(
-                'Full Name',
+                Get.find<LanguageController>().tr('full_name'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontWeight: FontWeight.w700,
@@ -446,7 +443,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: colors.inputBackground,
-                  hintText: 'Enter your full name',
+                  hintText: Get.find<LanguageController>().tr('enter_full_name'),
                   hintStyle: TextStyle(
                     color: colors.secondaryText,
                     fontSize: subtitleFontSize * 0.9,
@@ -477,7 +474,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               // Email
               Text(
-                'Email',
+                Get.find<LanguageController>().tr('email'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontWeight: FontWeight.w700,
@@ -500,7 +497,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: colors.inputBackground,
-                  hintText: 'Enter your email address',
+                  hintText: Get.find<LanguageController>().tr('enter_email_address'),
                   hintStyle: TextStyle(
                     color: colors.secondaryText,
                     fontSize: subtitleFontSize * 0.9,
@@ -531,7 +528,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               // Contact Number
               Text(
-                'Contact Number',
+                Get.find<LanguageController>().tr('contact_number'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontWeight: FontWeight.w700,
@@ -540,21 +537,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               SizedBox(height: smallSpacing),
               TextField(
-                      controller: _phoneController,
-                      keyboardType: TextInputType.phone,
-                      style: TextStyle(
-                        color: colors.primaryText,
-                        fontSize: subtitleFontSize,
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          _phoneError = _validatePhone(value);
-                        });
-                      },
+                controller: _phoneController,
+                keyboardType: TextInputType.phone,
+                style: TextStyle(
+                  color: colors.primaryText,
+                  fontSize: subtitleFontSize,
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _phoneError = _validatePhone(value);
+                  });
+                },
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: colors.inputBackground,
-                  hintText: 'Enter your 10-digit phone number',
+                  hintText: Get.find<LanguageController>().tr('enter_phone_number'),
                   hintStyle: TextStyle(
                     color: colors.secondaryText,
                     fontSize: subtitleFontSize * 0.9,
@@ -606,7 +603,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               // Address
               Text(
-                'Address',
+                Get.find<LanguageController>().tr('address'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontWeight: FontWeight.w700,
@@ -630,7 +627,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   filled: true,
                   fillColor: colors.inputBackground,
                   hintText:
-                      'Enter your complete address (Area/Street, city, District, State, Pincode,)',
+                      Get.find<LanguageController>().tr('enter_complete_address'),
                   hintStyle: TextStyle(
                     color: colors.secondaryText,
                     fontSize: subtitleFontSize * 0.9,
@@ -664,7 +661,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               // Username
               Text(
-                'Username',
+                Get.find<LanguageController>().tr('username'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontWeight: FontWeight.w700,
@@ -686,7 +683,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: colors.inputBackground,
-                  hintText: 'Enter your username',
+                  hintText: Get.find<LanguageController>().tr('username_hint'),
                   hintStyle: TextStyle(
                     color: colors.secondaryText,
                     fontSize: subtitleFontSize * 0.9,
@@ -720,7 +717,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               // Create Password
               Text(
-                'Create Password',
+                Get.find<LanguageController>().tr('create_password'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontWeight: FontWeight.w700,
@@ -743,7 +740,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: colors.inputBackground,
-                  hintText: 'Enter your password',
+                  hintText: Get.find<LanguageController>().tr('enter_password'),
                   hintStyle: TextStyle(
                     color: colors.secondaryText,
                     fontSize: subtitleFontSize * 0.9,
@@ -787,7 +784,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Password Strength',
+                    Get.find<LanguageController>().tr('password_strength'),
                     style: TextStyle(
                       color: colors.secondaryText,
                       fontSize: subtitleFontSize * 0.8,
@@ -840,7 +837,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               // Confirm Password
               Text(
-                'Confirm Password',
+                Get.find<LanguageController>().tr('confirm_password'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontWeight: FontWeight.w700,
@@ -869,7 +866,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: colors.inputBackground,
-                  hintText: 'Confirm your password',
+                  hintText: Get.find<LanguageController>().tr('confirm_password_hint'),
                   hintStyle: TextStyle(
                     color: colors.secondaryText,
                     fontSize: subtitleFontSize * 0.9,
@@ -908,7 +905,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               // Sign Up button
               PrimaryButton(
-                label: _isLoading ? 'Signing Up...' : 'Sign Up',
+                label: _isLoading ? Get.find<LanguageController>().tr('signing_up') : Get.find<LanguageController>().tr('sign_up'),
                 onPressed: _isLoading ? null : _onSignUp,
                 backgroundColor: colors.buttonBg,
                 textColor: colors.buttonText,
@@ -918,28 +915,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: smallSpacing * 2),
 
               Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Already have an account? ',
-                      style: TextStyle(
-                        color: colors.secondaryText,
-                        fontSize: subtitleFontSize,
-                      ),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: colors.secondaryText,
+                      fontSize: subtitleFontSize,
+                      height: 1.4,
                     ),
-                    TextButton(
-                      onPressed: () => Get.back(),
-                      child: Text(
-                        'Login',
+                    children: [
+                      TextSpan(
+                        text: Get.find<LanguageController>().tr('have_account'),
+                      ),
+                      TextSpan(
+                        text: Get.find<LanguageController>().tr('login'),
                         style: TextStyle(
                           color: colors.buttonBg,
                           fontWeight: FontWeight.w700,
-                          fontSize: subtitleFontSize,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
 

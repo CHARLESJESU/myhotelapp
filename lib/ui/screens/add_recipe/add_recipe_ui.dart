@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../../constants/app_strings.dart';
+import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
-import '../../../services/theme_service.dart';
+import '../../../language/language_controller.dart';
+import '../../../services/auth_service.dart';
+import '../../../services/database_service.dart';
+import '../../api/api_calls.dart';
 import '../../widgets/image_picker_ui.dart';
 import '../../widgets/primary_button.dart';
-import '../../widgets/success_message.dart';
+import '../../widgets/app_toast.dart';
 import 'add_recipe_dummydata.dart';
-import 'widget/add_recipe_widget.dart';
 
 class AddRecipeScreen extends StatefulWidget {
   const AddRecipeScreen({super.key});
@@ -39,17 +41,152 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
     });
   }
 
-  void _onAddRecipe() {
+  void _onAddRecipe() async {
     setState(() {
       _showSuccess = false; // reset previous message
     });
 
     if (_formKey.currentState?.validate() ?? false) {
-      // UI-only success state
-      setState(() {
-        _showSuccess = true;
-      });
-      // Optionally keep values; no backend logic per scope.
+      // Get the current user ID directly from database service
+      final databaseService = DatabaseService();
+      final authService = AuthService.to;
+      final currentUser = authService.currentUser;
+
+      if (currentUser == null) {
+        AppToast.error(
+          context,
+          title: Get.find<LanguageController>().tr('error'),
+          description: Get.find<LanguageController>().tr(
+            'user_not_authenticated',
+          ),
+        );
+        return;
+      }
+
+      // Prepare API call parameters
+      final foodName = _nameController.text.trim();
+      final foodDescription = _descriptionController.text.trim();
+      final foodCost =
+          double.tryParse(_priceController.text.trim())?.toInt() ?? 0;
+      final modeOfFood = _mode ?? '';
+      final foodCategory = _category ?? '';
+
+      // Get user data from database service
+      final userFromDb = await databaseService.getUserByEmail(
+        currentUser.userEmail,
+      );
+
+      if (userFromDb == null) {
+        AppToast.error(
+          context,
+          title: Get.find<LanguageController>().tr('error'),
+          description: Get.find<LanguageController>().tr('user_data_not_found'),
+        );
+        return;
+      }
+
+      // Extract IDs from database record
+      int userId = userFromDb['userid'] ?? 0;
+      int restaurantId =
+          userFromDb['restaurantid'] ??
+          1; // Default to restaurant ID 1 for testing
+
+      final available = true; // Assuming the recipe is available when added
+      final foodImage = ''; // Placeholder for image URL
+
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext dialogContext) {
+          return AlertDialog(
+            content: Row(
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(width: 20),
+                Text(
+                  'Adding recipe...',
+                  style: TextStyle(color: dialogContext.colors.primaryText),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      try {
+        // Call the add recipe API
+        final result = await ApiCalls.addRecipeApi(
+          foodname: foodName,
+          cost: foodCost,
+          foodimage: foodImage,
+          modeoffood: modeOfFood,
+          foodcategory: foodCategory,
+          fooddescription: foodDescription,
+          restaurantid: restaurantId,
+          available: available,
+        );
+
+        // Close the loading dialog if context is still valid
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+
+        if (result['success'] && mounted) {
+          // Show success message
+          setState(() {
+            _showSuccess = true;
+          });
+
+          // Show success toast
+          AppToast.success(
+            context,
+            title: Get.find<LanguageController>().tr('success'),
+            description: Get.find<LanguageController>().tr(
+              'recipe_added_successfully',
+            ),
+          );
+
+          // Clear form after successful submission
+          _nameController.clear();
+          _descriptionController.clear();
+          _priceController.clear();
+          setState(() {
+            _mode = null;
+            _category = null;
+            _hasImage = false;
+          });
+        } else if (mounted) {
+          // Show error message
+          String errorMessage =
+              result['errorMessage'] ??
+              Get.find<LanguageController>().tr('failed_add_recipe');
+          if (result['data'] != null && result['data']['message'] != null) {
+            errorMessage = result['data']['message'];
+          }
+
+          AppToast.error(
+            context,
+            title: Get.find<LanguageController>().tr('error'),
+            description: errorMessage,
+          );
+        }
+      } catch (e) {
+        // Close the loading dialog if context is still valid
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+
+        if (mounted) {
+          AppToast.error(
+            context,
+            title: Get.find<LanguageController>().tr('error'),
+            description: Get.find<LanguageController>()
+                .tr('unexpected_error')
+                .replaceAll('{error}', e.toString()),
+          );
+        }
+      }
     }
   }
 
@@ -116,7 +253,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
       appBar: AppBar(
         backgroundColor: colors.appBarBg,
         title: Text(
-          'Add New Recipe',
+          Get.find<LanguageController>().tr('add_new_recipe_title'),
           style: TextStyle(color: colors.primaryText, fontSize: titleFontSize),
         ),
         leading: BackButton(color: colors.primaryText),
@@ -147,19 +284,6 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Appearance selector
-                        AppearanceSelector(
-                          appearance: ThemeService.appearanceLabel,
-                          onAppearanceChanged: (label) {
-                            if (label == 'Light')
-                              ThemeService.setThemeMode(ThemeMode.light);
-                            if (label == 'Dark')
-                              ThemeService.setThemeMode(ThemeMode.dark);
-                            if (label == 'System')
-                              ThemeService.setThemeMode(ThemeMode.system);
-                          },
-                        ),
-
                         // main card
                         Card(
                           color: colors.inputBackground,
@@ -182,12 +306,15 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   decoration: InputDecoration(
                                     filled: true,
                                     fillColor: colors.inputBackground,
-                                    labelText: 'Food Name',
+                                    labelText: Get.find<LanguageController>()
+                                        .tr('food_name'),
                                     labelStyle: TextStyle(
                                       color: colors.primaryText,
                                       fontSize: labelFontSize,
                                     ),
-                                    hintText: 'e.g. Classic Margherita Pizza',
+                                    hintText: Get.find<LanguageController>().tr(
+                                      'food_name_hint',
+                                    ),
                                     hintStyle: TextStyle(
                                       color: colors.secondaryText,
                                       fontSize: labelFontSize * 0.85,
@@ -207,7 +334,9 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   ),
                                   validator: (v) =>
                                       (v == null || v.trim().isEmpty)
-                                      ? 'Please enter food name'
+                                      ? Get.find<LanguageController>().tr(
+                                          'please_enter_food_name',
+                                        )
                                       : null,
                                 ),
                                 SizedBox(height: smallSpacing),
@@ -222,13 +351,15 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   decoration: InputDecoration(
                                     filled: true,
                                     fillColor: colors.inputBackground,
-                                    labelText: 'Description (Optional)',
+                                    labelText: Get.find<LanguageController>()
+                                        .tr('description_optional'),
                                     labelStyle: TextStyle(
                                       color: colors.primaryText,
                                       fontSize: labelFontSize,
                                     ),
-                                    hintText:
-                                        'e.g. Fresh basil, mozzarella, and a rich tomato sauce...',
+                                    hintText: Get.find<LanguageController>().tr(
+                                      'description_hint',
+                                    ),
                                     hintStyle: TextStyle(
                                       color: colors.secondaryText,
                                       fontSize: labelFontSize * 0.85,
@@ -255,7 +386,8 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                 DropdownButtonFormField<String>(
                                   value: _mode,
                                   decoration: InputDecoration(
-                                    labelText: 'Mode of Food',
+                                    labelText: Get.find<LanguageController>()
+                                        .tr('mode_of_food'),
                                     labelStyle: TextStyle(
                                       color: colors.primaryText,
                                       fontSize: labelFontSize,
@@ -280,12 +412,14 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                     color: colors.primaryText,
                                     fontSize: labelFontSize * 0.9,
                                   ),
-                                  items: AddRecipeDummyData.modes
+                                  items: AddRecipeDummyData.modeKeys
                                       .map(
                                         (m) => DropdownMenuItem(
                                           value: m,
                                           child: Text(
-                                            m,
+                                            Get.find<LanguageController>().tr(
+                                              m,
+                                            ),
                                             style: TextStyle(
                                               fontSize: labelFontSize * 0.9,
                                             ),
@@ -295,14 +429,17 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                       .toList(),
                                   onChanged: (v) => setState(() => _mode = v),
                                   validator: (v) => v == null || v.isEmpty
-                                      ? 'Please select mode'
+                                      ? Get.find<LanguageController>().tr(
+                                          'please_select_mode',
+                                        )
                                       : null,
                                 ),
                                 SizedBox(height: smallSpacing),
                                 DropdownButtonFormField<String>(
                                   value: _category,
                                   decoration: InputDecoration(
-                                    labelText: 'Food Category',
+                                    labelText: Get.find<LanguageController>()
+                                        .tr('food_category'),
                                     labelStyle: TextStyle(
                                       color: colors.primaryText,
                                       fontSize: labelFontSize,
@@ -327,12 +464,14 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                     color: colors.primaryText,
                                     fontSize: labelFontSize * 0.9,
                                   ),
-                                  items: AddRecipeDummyData.categories
+                                  items: AddRecipeDummyData.categoryKeys
                                       .map(
                                         (c) => DropdownMenuItem(
                                           value: c,
                                           child: Text(
-                                            c,
+                                            Get.find<LanguageController>().tr(
+                                              c,
+                                            ),
                                             style: TextStyle(
                                               fontSize: labelFontSize * 0.9,
                                             ),
@@ -343,7 +482,9 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   onChanged: (v) =>
                                       setState(() => _category = v),
                                   validator: (v) => v == null || v.isEmpty
-                                      ? 'Please select category'
+                                      ? Get.find<LanguageController>().tr(
+                                          'please_select_category',
+                                        )
                                       : null,
                                 ),
                                 SizedBox(height: smallSpacing),
@@ -356,13 +497,16 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                   decoration: InputDecoration(
                                     filled: true,
                                     fillColor: colors.inputBackground,
-                                    labelText: 'Price / Cost',
+                                    labelText: Get.find<LanguageController>()
+                                        .tr('price_cost'),
                                     labelStyle: TextStyle(
                                       color: colors.primaryText,
                                       fontSize: labelFontSize,
                                     ),
                                     prefixText: '\$ ',
-                                    hintText: '0.00',
+                                    hintText: Get.find<LanguageController>().tr(
+                                      'price_hint',
+                                    ),
                                     hintStyle: TextStyle(
                                       color: colors.secondaryText,
                                       fontSize: labelFontSize * 0.85,
@@ -386,18 +530,24 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                                       ),
                                   validator: (v) {
                                     if (v == null || v.trim().isEmpty) {
-                                      return 'Please enter price';
+                                      return Get.find<LanguageController>().tr(
+                                        'please_enter_price',
+                                      );
                                     }
                                     final parsed = double.tryParse(v);
                                     if (parsed == null) {
-                                      return 'Please enter a valid number';
+                                      return Get.find<LanguageController>().tr(
+                                        'please_enter_valid_number',
+                                      );
                                     }
                                     return null;
                                   },
                                 ),
                                 SizedBox(height: mediumSpacing),
                                 Text(
-                                  'Upload Food Image (Optional)',
+                                  Get.find<LanguageController>().tr(
+                                    'upload_food_image',
+                                  ),
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: colors.primaryText,
@@ -430,22 +580,13 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                           ),
                         ),
 
-                        SizedBox(height: mediumSpacing),
-
-                        if (_showSuccess)
-                          const SuccessMessage(
-                            message: 'Success! Recipe added successfully.',
-                          ),
-
-                        SizedBox(height: smallSpacing),
-
-                        const Spacer(),
-
                         // primary action at bottom
                         Padding(
                           padding: EdgeInsets.only(bottom: mediumSpacing),
                           child: PrimaryButton(
-                            label: AppStrings.addRecipe,
+                            label: Get.find<LanguageController>().tr(
+                              'add_recipe',
+                            ),
                             onPressed: _onAddRecipe,
                             backgroundColor: colors.buttonBg,
                             textColor: colors.buttonText,

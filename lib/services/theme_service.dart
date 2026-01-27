@@ -22,6 +22,18 @@ class ThemeService {
     }
   }
 
+  /// Returns the internal theme value (for comparison purposes)
+  static String get internalThemeValue {
+    switch (current) {
+      case ThemeMode.light:
+        return 'Light';
+      case ThemeMode.dark:
+        return 'Dark';
+      default:
+        return 'System';
+    }
+  }
+
   static void setThemeMode(ThemeMode mode) => themeMode.value = mode;
 
   static void setDark(bool dark) =>

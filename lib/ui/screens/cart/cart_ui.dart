@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
+import '../../../language/language_controller.dart';
 import '../../router/routing.dart';
 import '../confirm_order_dialog/confirm_order_dialog_ui.dart';
 import 'cart_dummydata.dart';
@@ -33,7 +34,7 @@ class CartScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'My Cart',
+          Get.find<LanguageController>().tr('my_cart'),
           style: TextStyle(
             color: colors.primaryText,
             fontWeight: FontWeight.bold,
@@ -56,9 +57,28 @@ class CartContent extends StatefulWidget {
 }
 
 class _CartContentState extends State<CartContent> {
-  List<Map<String, dynamic>> _items = List.from(CartDummyData.initialCartItems);
-  final double _deliveryFee = CartDummyData.deliveryFee;
-  final double _taxes = CartDummyData.taxes;
+  List<Map<String, dynamic>> _items = [];
+  late double _deliveryFee;
+  late double _taxes;
+
+  @override
+  void initState() {
+    super.initState();
+    _deliveryFee = CartDummyData.deliveryFee;
+    _taxes = CartDummyData.taxes;
+    _initializeItems();
+  }
+
+  void _initializeItems() {
+    final langController = Get.find<LanguageController>();
+    _items = CartDummyData.initialCartItemKeys.map((item) {
+      return {
+        'title': langController.tr(item['title_key']),
+        'price': item['price'],
+        'qty': item['qty'],
+      };
+    }).toList();
+  }
 
   void _changeQty(int index, int delta) {
     setState(() {
@@ -138,7 +158,7 @@ class _CartContentState extends State<CartContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'My Cart',
+                  Get.find<LanguageController>().tr('my_cart'),
                   style: TextStyle(
                     color: colors.primaryText,
                     fontSize: titleFontSize,
@@ -174,21 +194,21 @@ class _CartContentState extends State<CartContent> {
             ),
             SizedBox(height: mediumSpacing),
             SummaryRow(
-              label: 'Subtotal',
+              label: Get.find<LanguageController>().tr('subtotal'),
               value: '\$${_subtotal.toStringAsFixed(2)}',
               primaryText: colors.primaryText,
               secondaryText: colors.secondaryText,
             ),
             SizedBox(height: smallSpacing),
             SummaryRow(
-              label: 'Delivery Fee',
+              label: Get.find<LanguageController>().tr('delivery_fee'),
               value: '\$${_deliveryFee.toStringAsFixed(2)}',
               primaryText: colors.primaryText,
               secondaryText: colors.secondaryText,
             ),
             SizedBox(height: smallSpacing),
             SummaryRow(
-              label: 'Taxes',
+              label: Get.find<LanguageController>().tr('taxes'),
               value: '\$${_taxes.toStringAsFixed(2)}',
               primaryText: colors.primaryText,
               secondaryText: colors.secondaryText,
@@ -220,7 +240,7 @@ class _CartContentState extends State<CartContent> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Total',
+                          Get.find<LanguageController>().tr('total'),
                           style: TextStyle(color: colors.secondaryText),
                         ),
                         Text(
@@ -258,8 +278,8 @@ class _CartContentState extends State<CartContent> {
                           Get.toNamed(AppRoutes.trackOrder);
                         }
                       },
-                      child: const Text(
-                        'Place Order',
+                      child: Text(
+                        Get.find<LanguageController>().tr('place_order'),
                         style: TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ),

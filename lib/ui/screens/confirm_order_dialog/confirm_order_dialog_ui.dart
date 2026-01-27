@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
+import '../../../language/language_controller.dart';
 
 class ConfirmOrderDialog extends StatelessWidget {
   final List<Map<String, dynamic>> items;
@@ -105,7 +106,7 @@ class ConfirmOrderDialog extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                'Confirm Order',
+                Get.find<LanguageController>().tr('confirm_order'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontSize: titleFontSize,
@@ -116,7 +117,7 @@ class ConfirmOrderDialog extends StatelessWidget {
             SizedBox(height: smallSpacing),
             Center(
               child: Text(
-                'Please review your order before confirming.',
+                Get.find<LanguageController>().tr('review_order_before_confirming'),
                 style: TextStyle(
                   color: colors.secondaryText,
                   fontSize: subtitleFontSize,
@@ -161,7 +162,7 @@ class ConfirmOrderDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total',
+                  Get.find<LanguageController>().tr('total'),
                   style: TextStyle(
                     color: colors.secondaryText,
                     fontWeight: FontWeight.w700,
@@ -202,7 +203,7 @@ class ConfirmOrderDialog extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'Cancel',
+                        Get.find<LanguageController>().tr('cancel'),
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: subtitleFontSize,
@@ -232,7 +233,7 @@ class ConfirmOrderDialog extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'Confirm Order',
+                        Get.find<LanguageController>().tr('confirm_order'),
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: subtitleFontSize,

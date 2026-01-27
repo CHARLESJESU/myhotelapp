@@ -50,4 +50,12 @@ class AdminOrderManagementDummyData {
       status: 'Delivered',
     ),
   ];
+
+  // These are localization keys that will be used in the UI
+  static const String orderManagementKey = 'order_management';
+  static const String allKey = 'all';
+  static const String newKey = 'new';
+  static const String preparingKey = 'preparing';
+  static const String deliveredKey = 'delivered';
+  static const String addNewRecipeKey = 'add_new_recipe';
 }

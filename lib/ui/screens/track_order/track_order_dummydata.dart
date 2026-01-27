@@ -2,13 +2,14 @@
 class TrackOrderDummyData {
   static const String defaultOrderNumber = '#123-ABC-456';
   static const String defaultEta = '35 - 45 min';
-  
-  static const String title = 'Your Order is on its\nWay!';
-  static const String subtitle = 'Thank you for your order. You can track its progress below.';
-  
-  static const String orderNumberLabel = 'Order Number';
-  static const String etaLabel = 'Estimated Arrival';
-  
-  static const String trackButtonText = 'Track Order';
-  static const String returnToMenuText = 'Return to Menu';
+
+  // These are localization keys that will be used in the UI
+  static const String titleKey = 'order_on_way';
+  static const String subtitleKey = 'thank_you_for_order';
+
+  static const String orderNumberLabelKey = 'order_number';
+  static const String etaLabelKey = 'estimated_arrival';
+
+  static const String trackButtonKey = 'track_order';
+  static const String returnToMenuKey = 'return_to_menu';
 }

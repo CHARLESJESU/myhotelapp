@@ -1,12 +1,12 @@
 /// Dummy data for Add Recipe screen
 class AddRecipeDummyData {
-  static const List<String> modes = ['Veg', 'Non-Veg', 'Vegan'];
-  
-  static const List<String> categories = [
-    'Pizza',
-    'Pasta',
-    'Salad',
-    'Dessert',
-    'Beverage',
+  static const List<String> modeKeys = ['veg', 'non_veg', 'vegan'];
+
+  static const List<String> categoryKeys = [
+    'pizza',
+    'pasta',
+    'salad',
+    'dessert',
+    'beverage',
   ];
 }

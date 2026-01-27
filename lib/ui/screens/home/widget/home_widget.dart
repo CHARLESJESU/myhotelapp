@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../constants/app_colors.dart';
+import '../../../../language/language_controller.dart';
 
 /// Search bar widget for home screen
 class HomeSearchBar extends StatelessWidget {
@@ -21,10 +23,7 @@ class HomeSearchBar extends StatelessWidget {
         color: inputBg,
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 6,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: Row(
         children: [
           const Icon(Icons.search, color: AppColors.secondaryText),
@@ -34,7 +33,9 @@ class HomeSearchBar extends StatelessWidget {
               style: TextStyle(color: primaryText),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: 'Find restaurants or dishes',
+                hintText: Get.find<LanguageController>().tr(
+                  'find_restaurants_dishes',
+                ),
                 hintStyle: TextStyle(color: secondaryText),
               ),
             ),
@@ -72,7 +73,7 @@ class PromoCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '50% OFF Your First Order',
+                    Get.find<LanguageController>().tr('fifty_percent_off'),
                     style: TextStyle(
                       color: primaryText,
                       fontWeight: FontWeight.w700,
@@ -80,7 +81,7 @@ class PromoCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Valid for new users only',
+                    Get.find<LanguageController>().tr('valid_new_users'),
                     style: TextStyle(color: secondaryText),
                   ),
                 ],
@@ -118,10 +119,7 @@ class CategoryChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 8,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? buttonBg : inputBg,
           borderRadius: BorderRadius.circular(24),
@@ -138,9 +136,7 @@ class CategoryChip extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: isSelected
-                    ? AppColors.buttonText
-                    : secondaryText,
+                color: isSelected ? AppColors.buttonText : secondaryText,
               ),
             ),
           ],
@@ -197,19 +193,19 @@ class DishCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Spicy Pizza',
+                  Get.find<LanguageController>().tr('spicy_pizza'),
                   style: TextStyle(
                     color: primaryText,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
-                  'Pizzeria Roma',
+                  Get.find<LanguageController>().tr('pizzeria_roma'),
                   style: TextStyle(color: secondaryText, fontSize: 12),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '\$14.99',
+                  Get.find<LanguageController>().tr('price_spicy_pizza'),
                   style: TextStyle(
                     color: primaryText,
                     fontWeight: FontWeight.w700,
@@ -263,7 +259,7 @@ class RestaurantCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'The Gourmet Kitchen',
+                  Get.find<LanguageController>().tr('the_gourmet_kitchen'),
                   style: TextStyle(
                     color: primaryText,
                     fontWeight: FontWeight.w700,
@@ -271,7 +267,7 @@ class RestaurantCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Italian • \$\$',
+                  Get.find<LanguageController>().tr('italian_restaurant'),
                   style: TextStyle(color: secondaryText, fontSize: 12),
                 ),
               ],

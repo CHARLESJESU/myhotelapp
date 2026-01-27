@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
+import '../../../language/language_controller.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/user_model.dart';
 import '../../api/api_calls.dart';
@@ -30,8 +31,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if (useremail.isEmpty || password.isEmpty) {
       AppToast.error(
         context,
-        title: 'Validation Error',
-        description: 'Please enter both email and password',
+        title: Get.find<LanguageController>().tr('validation_error'),
+        description: Get.find<LanguageController>().tr(
+          'enter_both_email_password',
+        ),
       );
       return;
     }
@@ -56,9 +59,12 @@ class _LoginScreenState extends State<LoginScreen> {
           phoneNumber: userData['phoneNumber'],
           userPassword: userData['userpassword'],
           address: userData['address'],
-          isAddressProvided: userData['isaddressprvided'] == true || userData['isaddressprvided'] == 1,
-          isRestaurantOwner: userData['isrestaurentowner'] == true || userData['isrestaurentowner'] == 1,
-          lastVisitedScreen: null, // Initially null when logging in
+          isAddressProvided:
+              userData['isaddressprvided'] == true ||
+              userData['isaddressprvided'] == 1,
+          isRestaurantOwner:
+              userData['isrestaurentowner'] == true ||
+              userData['isrestaurentowner'] == 1,
         );
 
         // Login successful - store user data in SQLite and update auth state
@@ -66,8 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
         AppToast.success(
           context,
-          title: 'Success',
-          description: 'Login successful!',
+          title: Get.find<LanguageController>().tr('success'),
+          description: Get.find<LanguageController>().tr('login_successful'),
         );
 
         // Navigate to appropriate screen based on user type
@@ -80,24 +86,29 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } else {
         // Login failed
-        String errorMessage = 'Login failed. Please check your credentials.';
+        String errorMessage = Get.find<LanguageController>().tr(
+          'login_failed_credentials',
+        );
         if (result['errorMessage'] != null) {
           errorMessage = result['errorMessage'];
-        } else if (result['data'] != null && result['data']['message'] != null) {
+        } else if (result['data'] != null &&
+            result['data']['message'] != null) {
           errorMessage = result['data']['message'];
         }
 
         AppToast.error(
           context,
-          title: 'Login Failed',
+          title: Get.find<LanguageController>().tr('login_failed'),
           description: errorMessage,
         );
       }
     } catch (e) {
       AppToast.error(
         context,
-        title: 'Error',
-        description: 'An unexpected error occurred: $e',
+        title: Get.find<LanguageController>().tr('error'),
+        description: Get.find<LanguageController>()
+            .tr('unexpected_error')
+            .replaceAll('{error}', e.toString()),
       );
     }
   }
@@ -221,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           // Welcome title with responsive font size
                           Center(
                             child: Text(
-                              'Welcome Back',
+                              Get.find<LanguageController>().tr('welcome_back'),
                               style: TextStyle(
                                 fontSize: titleFontSize,
                                 fontWeight: FontWeight.w800,
@@ -234,7 +245,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           Center(
                             child: Text(
-                              'Log in to continue your culinary journey.',
+                              Get.find<LanguageController>().tr(
+                                'login_culinary_journey',
+                              ),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: subtitleFontSize,
@@ -247,7 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           // Email label with responsive font size
                           Text(
-                            'Email',
+                            Get.find<LanguageController>().tr('email'),
                             style: TextStyle(
                               color: colors.primaryText,
                               fontWeight: FontWeight.w700,
@@ -264,7 +277,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: colors.inputBackground,
-                              hintText: 'Enter your email',
+                              hintText: Get.find<LanguageController>().tr(
+                                'enter_email',
+                              ),
                               hintStyle: TextStyle(color: colors.secondaryText),
                               prefixIcon: Icon(
                                 Icons.email,
@@ -288,7 +303,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(height: smallSpacing * 1.5),
 
                           Text(
-                            'Password',
+                            Get.find<LanguageController>().tr('password'),
                             style: TextStyle(
                               color: colors.primaryText,
                               fontWeight: FontWeight.w700,
@@ -306,7 +321,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: colors.inputBackground,
-                              hintText: 'Enter your password',
+                              hintText: Get.find<LanguageController>().tr(
+                                'enter_password',
+                              ),
                               hintStyle: TextStyle(color: colors.secondaryText),
                               prefixIcon: Icon(
                                 Icons.lock,
@@ -349,7 +366,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               60,
                             ),
                             child: PrimaryButton(
-                              label: 'Login',
+                              label: Get.find<LanguageController>().tr('login'),
                               onPressed: _onLogin,
                               backgroundColor: colors.buttonBg,
                               textColor: colors.buttonText,
@@ -365,7 +382,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () =>
                                   Get.toNamed(AppRoutes.forgotPassword),
                               child: Text(
-                                'Forgot Password?',
+                                Get.find<LanguageController>().tr(
+                                  'forgot_password',
+                                ),
                                 style: TextStyle(
                                   color: colors.buttonBg,
                                   fontWeight: FontWeight.w600,
@@ -382,7 +401,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  "Don't have an account? ",
+                                  Get.find<LanguageController>().tr(
+                                    'no_account',
+                                  ),
                                   style: TextStyle(
                                     color: colors.secondaryText,
                                     fontSize: subtitleFontSize * 0.9,
@@ -392,7 +413,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onPressed: () =>
                                       Get.toNamed(AppRoutes.signUp),
                                   child: Text(
-                                    'Sign in',
+                                    Get.find<LanguageController>().tr(
+                                      'sign_up',
+                                    ),
                                     style: TextStyle(
                                       color: colors.buttonBg,
                                       fontWeight: FontWeight.w700,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../constants/app_colors.dart';
+import '../../../../language/language_controller.dart';
 
 /// Delivery illustration placeholder widget
 class DeliveryIllustration extends StatelessWidget {
@@ -52,7 +54,7 @@ class OrderInfoCard extends StatelessWidget {
       child: Column(
         children: [
           OrderInfoRow(
-            label: 'Order Number',
+            label: Get.find<LanguageController>().tr('order_number'),
             value: orderNumber,
             labelColor: secondaryText,
             valueColor: primaryText,
@@ -61,7 +63,7 @@ class OrderInfoCard extends StatelessWidget {
           const Divider(height: 1),
           const SizedBox(height: 10),
           OrderInfoRow(
-            label: 'Estimated Arrival',
+            label: Get.find<LanguageController>().tr('estimated_arrival'),
             value: eta,
             labelColor: secondaryText,
             valueColor: primaryText,

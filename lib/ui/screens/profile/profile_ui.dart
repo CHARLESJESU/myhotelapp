@@ -5,6 +5,8 @@ import '../../../constants/responsive_helper.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/database_service.dart';
 import '../../../services/theme_service.dart';
+import '../../../language/language_service.dart';
+import '../../../language/language_controller.dart';
 import '../../router/routing.dart';
 import 'widget/profile_widget.dart';
 
@@ -78,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         centerTitle: true,
         title: Text(
-          'My Profile',
+          Get.find<LanguageController>().tr('my_profile'),
           style: TextStyle(
             color: colors.primaryText,
             fontWeight: FontWeight.bold,
@@ -107,11 +109,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: ListView(
                 children: [
                   ProfileSectionTitle(
-                    text: 'Account',
+                    text: Get.find<LanguageController>().tr('account'),
                     primaryText: colors.primaryText,
                   ),
                   ProfileListRow(
-                    label: 'Personal Information',
+                    label: Get.find<LanguageController>().tr('personal_information'),
                     icon: Icons.person,
                     cardBg: colors.card,
                     btnBg: colors.buttonBg,
@@ -121,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: smallSpacing),
                   ProfileListRow(
-                    label: 'My Addresses',
+                    label: Get.find<LanguageController>().tr('my_addresses'),
                     icon: Icons.place,
                     cardBg: colors.card,
                     btnBg: colors.buttonBg,
@@ -131,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: smallSpacing),
                   ProfileListRow(
-                    label: 'Payment Methods',
+                    label: Get.find<LanguageController>().tr('payment_methods'),
                     icon: Icons.credit_card,
                     cardBg: colors.card,
                     btnBg: colors.buttonBg,
@@ -143,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   GestureDetector(
                     onTap: () => Get.toNamed(AppRoutes.orderHistory),
                     child: ProfileListRow(
-                      label: 'Order History',
+                      label: Get.find<LanguageController>().tr('order_history'),
                       icon: Icons.receipt_long,
                       cardBg: colors.card,
                       btnBg: colors.buttonBg,
@@ -155,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   SizedBox(height: mediumSpacing),
                   ProfileSectionTitle(
-                    text: 'Settings',
+                    text: Get.find<LanguageController>().tr('settings'),
                     primaryText: colors.primaryText,
                   ),
                   // notifications
@@ -170,15 +172,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(height: smallSpacing),
                   // appearance
                   AppearanceRow(
-                    appearance: ThemeService.appearanceLabel,
+                    appearance: ThemeService.internalThemeValue,
                     onAppearanceChanged: (label) {
                       // Apply global theme immediately
                       if (label == 'Light')
                         ThemeService.setThemeMode(ThemeMode.light);
-                      if (label == 'Dark')
+                      else if (label == 'Dark')
                         ThemeService.setThemeMode(ThemeMode.dark);
-                      if (label == 'System')
+                      else if (label == 'System')
                         ThemeService.setThemeMode(ThemeMode.system);
+                    },
+                    cardBg: colors.card,
+                    btnBg: colors.buttonBg,
+                    btnText: colors.buttonText,
+                    primaryText: colors.primaryText,
+                    isDark: context.isCurrentThemeDark,
+                  ),
+                  SizedBox(height: smallSpacing),
+                  // language selector
+                  LanguageSelectorRow(
+                    selectedLanguage: Get.find<LanguageController>().getCurrentLanguageName(),
+                    onLanguageChanged: (language) async {
+                      switch(language) {
+                        case 'English':
+                          await Get.find<LanguageController>().changeLanguage('en');
+                          break;
+                        case 'தமிழ்':
+                          await Get.find<LanguageController>().changeLanguage('ta');
+                          break;
+                        default:
+                          await Get.find<LanguageController>().changeLanguage('en');
+                          break;
+                      }
                     },
                     cardBg: colors.card,
                     btnBg: colors.buttonBg,
@@ -189,11 +214,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   SizedBox(height: mediumSpacing),
                   ProfileSectionTitle(
-                    text: 'Support & Legal',
+                    text: Get.find<LanguageController>().tr('support_legal'),
                     primaryText: colors.primaryText,
                   ),
                   ProfileListRow(
-                    label: 'Help & Support',
+                    label: Get.find<LanguageController>().tr('help_support'),
                     icon: Icons.help_outline,
                     cardBg: colors.card,
                     btnBg: colors.buttonBg,
@@ -203,7 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: smallSpacing),
                   ProfileListRow(
-                    label: 'About',
+                    label: Get.find<LanguageController>().tr('about'),
                     icon: Icons.info_outline,
                     cardBg: colors.card,
                     btnBg: colors.buttonBg,
@@ -231,8 +256,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         // Navigate to login screen
                         Get.offAllNamed(AppRoutes.login);
                       },
-                      child: const Text(
-                        'Log Out',
+                      child: Text(
+                        Get.find<LanguageController>().tr('log_out'),
                         style: TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ),

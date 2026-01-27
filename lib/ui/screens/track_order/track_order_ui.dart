@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
+import '../../../language/language_controller.dart';
 import '../../router/routing.dart';
 import 'widget/track_order_widget.dart';
 
@@ -81,7 +82,7 @@ class TrackOrderScreen extends StatelessWidget {
 
               SizedBox(height: mediumSpacing),
               Text(
-                'Your Order is on its\nWay!',
+                Get.find<LanguageController>().tr('order_on_way'),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontSize: titleFontSize,
@@ -91,7 +92,7 @@ class TrackOrderScreen extends StatelessWidget {
               ),
               SizedBox(height: smallSpacing),
               Text(
-                'Thank you for your order. You can track its progress below.',
+                Get.find<LanguageController>().tr('thank_you_for_order'),
                 style: TextStyle(
                   color: colors.secondaryText,
                   fontSize: subtitleFontSize,
@@ -113,7 +114,7 @@ class TrackOrderScreen extends StatelessWidget {
 
               // Track Order button
               TrackButton(
-                label: 'Track Order',
+                label: Get.find<LanguageController>().tr('track_order'),
                 backgroundColor: colors.buttonBg,
                 textColor: colors.buttonText,
                 onPressed: () {},
@@ -123,7 +124,7 @@ class TrackOrderScreen extends StatelessWidget {
               TextButton(
                 onPressed: () => Get.offNamed(AppRoutes.menu),
                 child: Text(
-                  'Return to Menu',
+                  Get.find<LanguageController>().tr('return_to_menu'),
                   style: TextStyle(
                     color: colors.buttonBg,
                     fontWeight: FontWeight.w700,

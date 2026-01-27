@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../constants/app_colors.dart';
+import '../../../../language/language_controller.dart';
 
 /// Profile header widget with avatar and name
 class ProfileHeader extends StatelessWidget {
@@ -63,10 +65,7 @@ class ProfileHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        Text(
-          'jane.doe@email.com',
-          style: TextStyle(color: secondaryText),
-        ),
+        Text('jane.doe@email.com', style: TextStyle(color: secondaryText)),
       ],
     );
   }
@@ -199,21 +198,19 @@ class NotificationToggleRow extends StatelessWidget {
         color: cardBg,
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 14,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       child: Row(
         children: [
-          ProfileIconSquare(icon: Icons.notifications, btnBg: btnBg, btnText: btnText),
+          ProfileIconSquare(
+            icon: Icons.notifications,
+            btnBg: btnBg,
+            btnText: btnText,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              'Notifications',
-              style: TextStyle(
-                color: primaryText,
-                fontWeight: FontWeight.w600,
-              ),
+              Get.find<LanguageController>().tr('notifications'),
+              style: TextStyle(color: primaryText, fontWeight: FontWeight.w600),
             ),
           ),
           Switch(
@@ -248,6 +245,13 @@ class AppearanceRow extends StatelessWidget {
     required this.isDark,
   });
 
+  String _getInternalValue(String appearance) {
+    if (appearance == Get.find<LanguageController>().tr('light')) return 'Light';
+    if (appearance == Get.find<LanguageController>().tr('dark')) return 'Dark';
+    if (appearance == Get.find<LanguageController>().tr('system')) return 'System';
+    return appearance; // fallback to the original value
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -255,47 +259,43 @@ class AppearanceRow extends StatelessWidget {
         color: cardBg,
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 14,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       child: Row(
         children: [
-          ProfileIconSquare(icon: Icons.brightness_6, btnBg: btnBg, btnText: btnText),
+          ProfileIconSquare(
+            icon: Icons.brightness_6,
+            btnBg: btnBg,
+            btnText: btnText,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              'Appearance',
-              style: TextStyle(
-                color: primaryText,
-                fontWeight: FontWeight.w600,
-              ),
+              Get.find<LanguageController>().tr('appearance'),
+              style: TextStyle(color: primaryText, fontWeight: FontWeight.w600),
             ),
           ),
           // simple segmented control
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: isDark
-                  ? AppColors.cardDark
-                  : AppColors.lightCard,
+              color: isDark ? AppColors.cardDark : AppColors.lightCard,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               children: [
                 _AppearanceOption(
-                  label: 'Light',
-                  isSelected: appearance == 'Light',
+                  label: Get.find<LanguageController>().tr('light'),
+                  isSelected: _getInternalValue(appearance) == 'Light',
                   onTap: () => onAppearanceChanged('Light'),
                 ),
                 _AppearanceOption(
-                  label: 'Dark',
-                  isSelected: appearance == 'Dark',
+                  label: Get.find<LanguageController>().tr('dark'),
+                  isSelected: _getInternalValue(appearance) == 'Dark',
                   onTap: () => onAppearanceChanged('Dark'),
                 ),
                 _AppearanceOption(
-                  label: 'System',
-                  isSelected: appearance == 'System',
+                  label: Get.find<LanguageController>().tr('system'),
+                  isSelected: _getInternalValue(appearance) == 'System',
                   onTap: () => onAppearanceChanged('System'),
                 ),
               ],
@@ -332,9 +332,112 @@ class _AppearanceOption extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected
-                ? AppColors.buttonText
-                : AppColors.secondaryText,
+            color: isSelected ? AppColors.buttonText : AppColors.secondaryText,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Language selector row widget
+class LanguageSelectorRow extends StatelessWidget {
+  final String selectedLanguage;
+  final ValueChanged<String> onLanguageChanged;
+  final Color cardBg;
+  final Color btnBg;
+  final Color btnText;
+  final Color primaryText;
+  final bool isDark;
+
+  const LanguageSelectorRow({
+    super.key,
+    required this.selectedLanguage,
+    required this.onLanguageChanged,
+    required this.cardBg,
+    required this.btnBg,
+    required this.btnText,
+    required this.primaryText,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: cardBg,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      child: Row(
+        children: [
+          ProfileIconSquare(
+            icon: Icons.language,
+            btnBg: btnBg,
+            btnText: btnText,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              Get.find<LanguageController>().tr('language'),
+              style: TextStyle(color: primaryText, fontWeight: FontWeight.w600),
+            ),
+          ),
+          // segmented control for languages
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: isDark ? AppColors.cardDark : AppColors.lightCard,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                _LanguageOption(
+                  label: Get.find<LanguageController>().tr('english'),
+                  isSelected: selectedLanguage == Get.find<LanguageController>().tr('english'),
+                  onTap: () => onLanguageChanged(Get.find<LanguageController>().tr('english')),
+                ),
+                _LanguageOption(
+                  label: Get.find<LanguageController>().tr('tamil'),
+                  isSelected: selectedLanguage == Get.find<LanguageController>().tr('tamil'),
+                  onTap: () => onLanguageChanged(Get.find<LanguageController>().tr('tamil')),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LanguageOption extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _LanguageOption({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.buttonBg : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? AppColors.buttonText : AppColors.secondaryText,
             fontWeight: FontWeight.w600,
           ),
         ),

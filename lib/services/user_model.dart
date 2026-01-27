@@ -7,7 +7,8 @@ class User {
   final String? address;
   final bool isAddressProvided;
   final bool isRestaurantOwner;
-  final String? lastVisitedScreen;
+  final int? restaurantId; // Added restaurant ID for restaurant owners
+  // final String? lastVisitedScreen;
 
   User({
     required this.userId,
@@ -18,7 +19,8 @@ class User {
     this.address,
     required this.isAddressProvided,
     required this.isRestaurantOwner,
-    this.lastVisitedScreen,
+    this.restaurantId, // Added restaurant ID parameter
+    // this.lastVisitedScreen,
   });
 
   // Convert from JSON
@@ -32,7 +34,8 @@ class User {
       address: json['address'],
       isAddressProvided: json['isaddressprvided'] == 1,
       isRestaurantOwner: json['isrestaurentowner'] == 1,
-      lastVisitedScreen: json['last_visited_screen'],
+      restaurantId: json['restaurantid'], // Added restaurant ID from JSON
+      // lastVisitedScreen: json['last_visited_screen'],
     );
   }
 
@@ -47,7 +50,9 @@ class User {
       'address': address,
       'isaddressprvided': isAddressProvided ? 1 : 0,
       'isrestaurentowner': isRestaurantOwner ? 1 : 0,
-      'last_visited_screen': lastVisitedScreen,
+      'restaurantid':
+          restaurantId, // Added restaurant ID to map   'last_visited_screen': lastVisitedScreen,
+      // 'last_visited_screen': lastVisitedScreen,
     };
   }
 

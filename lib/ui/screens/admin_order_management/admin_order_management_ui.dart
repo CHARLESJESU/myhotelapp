@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
+import '../../../language/language_controller.dart';
 
 import '../../router/routing.dart';
 import 'admin_order_management_dummydata.dart';
@@ -11,18 +12,17 @@ class AdminOrderManagementScreen extends StatefulWidget {
   const AdminOrderManagementScreen({super.key});
 
   @override
-  State<AdminOrderManagementScreen> createState() => _AdminOrderManagementScreenState();
+  State<AdminOrderManagementScreen> createState() =>
+      _AdminOrderManagementScreenState();
 }
 
-class _AdminOrderManagementScreenState extends State<AdminOrderManagementScreen> {
+class _AdminOrderManagementScreenState
+    extends State<AdminOrderManagementScreen> {
   @override
   void initState() {
     super.initState();
     // Record that the user is on the admin order management screen
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _AdminOrderManagementScreenState extends State<AdminOrderManagementScreen>
           elevation: 0,
           centerTitle: true,
           title: Text(
-            'Order Management',
+            Get.find<LanguageController>().tr('order_management'),
             style: TextStyle(
               color: colors.primaryText,
               fontWeight: FontWeight.w700,
@@ -66,31 +66,33 @@ class _AdminOrderManagementScreenState extends State<AdminOrderManagementScreen>
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.filter_list, color: colors.appBarIcon),
-              onPressed: () {},
+              icon: Icon(Icons.person, color: colors.appBarIcon),
+              onPressed: () {
+                Get.toNamed(AppRoutes.profile);
+              },
             ),
           ],
           bottom: TabBar(
-            isScrollable: true,
+            isScrollable: false,
             indicatorColor: colors.bottomNavActive,
             labelColor: colors.bottomNavActive,
             unselectedLabelColor: colors.secondaryText,
             tabs: [
               Tab(
-                child: Text('All', style: TextStyle(fontSize: tabFontSize)),
+                child: Text(Get.find<LanguageController>().tr('all'), style: TextStyle(fontSize: tabFontSize)),
               ),
               Tab(
-                child: Text('New', style: TextStyle(fontSize: tabFontSize)),
+                child: Text(Get.find<LanguageController>().tr('new'), style: TextStyle(fontSize: tabFontSize)),
               ),
               Tab(
                 child: Text(
-                  'Preparing',
+                  Get.find<LanguageController>().tr('preparing'),
                   style: TextStyle(fontSize: tabFontSize),
                 ),
               ),
               Tab(
                 child: Text(
-                  'Delivered',
+                  Get.find<LanguageController>().tr('delivered'),
                   style: TextStyle(fontSize: tabFontSize),
                 ),
               ),
@@ -103,7 +105,7 @@ class _AdminOrderManagementScreenState extends State<AdminOrderManagementScreen>
           onPressed: () => Get.toNamed(AppRoutes.addRecipe),
           icon: Icon(Icons.add, color: colors.buttonText),
           label: Text(
-            'Add new Recipe',
+            Get.find<LanguageController>().tr('add_new_recipe'),
             style: TextStyle(
               fontWeight: FontWeight.w700,
               color: colors.buttonText,

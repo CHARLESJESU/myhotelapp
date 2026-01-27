@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/responsive_helper.dart';
+import '../../../language/language_controller.dart';
 import 'favorites_dummydata.dart';
 import 'widget/favorites_widget.dart';
 
@@ -31,7 +32,7 @@ class FavoritesScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Favorites',
+          Get.find<LanguageController>().tr('favorites'),
           style: TextStyle(
             color: colors.primaryText,
             fontWeight: FontWeight.bold,
@@ -43,7 +44,7 @@ class FavoritesScreen extends StatelessWidget {
           TextButton(
             onPressed: () {},
             child: Text(
-              'Edit',
+              Get.find<LanguageController>().tr('edit'),
               style: TextStyle(
                 color: colors.buttonBg,
                 fontWeight: FontWeight.w600,
@@ -72,8 +73,24 @@ class FavoritesContent extends StatefulWidget {
 }
 
 class _FavoritesContentState extends State<FavoritesContent> {
-  final List<Map<String, dynamic>> _items = FavoritesDummyData.favoriteItems;
+  late List<Map<String, dynamic>> _items;
   String _query = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeItems();
+  }
+
+  void _initializeItems() {
+    final langController = Get.find<LanguageController>();
+    _items = FavoritesDummyData.favoriteItemKeys.map((item) {
+      return {
+        'title': langController.tr(item['title_key']),
+        'price': item['price'],
+      };
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +154,7 @@ class _FavoritesContentState extends State<FavoritesContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Favorites',
+                  Get.find<LanguageController>().tr('favorites'),
                   style: TextStyle(
                     color: colors.primaryText,
                     fontSize: titleFontSize,
@@ -147,7 +164,7 @@ class _FavoritesContentState extends State<FavoritesContent> {
                 TextButton(
                   onPressed: () {},
                   child: Text(
-                    'Edit',
+                    Get.find<LanguageController>().tr('edit'),
                     style: TextStyle(
                       color: colors.buttonBg,
                       fontWeight: FontWeight.w600,
@@ -164,7 +181,7 @@ class _FavoritesContentState extends State<FavoritesContent> {
               inputBg: colors.inputBackground,
               primaryText: colors.primaryText,
               secondaryText: colors.secondaryText,
-              hintText: 'Search in favorites...',
+              hintText: Get.find<LanguageController>().tr('search_in_favorites'),
               onChanged: (v) => setState(() => _query = v),
             ),
             SizedBox(height: mediumSpacing),

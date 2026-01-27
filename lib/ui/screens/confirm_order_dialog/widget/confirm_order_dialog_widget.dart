@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../../../language/language_controller.dart';
 
 /// Order item row widget for confirm dialog
 class OrderItemRow extends StatelessWidget {
@@ -73,10 +75,10 @@ class DialogActionButtons extends StatelessWidget {
               ),
             ),
             onPressed: onCancel,
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.symmetric(vertical: 12.0),
               child: Text(
-                'Cancel',
+                Get.find<LanguageController>().tr('cancel'),
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
             ),
@@ -93,10 +95,10 @@ class DialogActionButtons extends StatelessWidget {
               ),
             ),
             onPressed: onConfirm,
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.symmetric(vertical: 12.0),
               child: Text(
-                'Confirm Order',
+                Get.find<LanguageController>().tr('confirm_order'),
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
             ),

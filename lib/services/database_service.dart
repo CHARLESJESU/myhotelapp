@@ -6,7 +6,7 @@ class DatabaseService {
 
   static Future<Database> get database async {
     if (_database != null) return _database!;
-    
+
     String path = join(await getDatabasesPath(), 'user_database.db');
     _database = await openDatabase(
       path,
@@ -22,6 +22,7 @@ class DatabaseService {
             address TEXT,
             isaddressprvided INTEGER,
             isrestaurentowner INTEGER,
+            restaurantid INTEGER,
             last_visited_screen TEXT
           )
         ''');

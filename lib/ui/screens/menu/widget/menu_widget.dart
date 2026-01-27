@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../constants/app_colors.dart';
+import '../../../../language/language_controller.dart';
 
 /// Menu category chip widget
 class MenuCategoryChip extends StatelessWidget {
@@ -103,14 +105,17 @@ class MenuItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Margherita Pizza',
+                      Get.find<LanguageController>().tr('margherita_pizza'),
                       style: TextStyle(
                         color: primaryText,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 6),
-                    Text('\$12.99', style: TextStyle(color: secondaryText)),
+                    Text(
+                      Get.find<LanguageController>().tr('price_margherita'),
+                      style: TextStyle(color: secondaryText),
+                    ),
                   ],
                 ),
               ),

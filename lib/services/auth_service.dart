@@ -5,7 +5,7 @@ import 'user_model.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
-  
+
   final RxBool _isLoggedIn = false.obs;
   final Rx<User?> _currentUser = Rx<User?>(null);
 
@@ -17,7 +17,11 @@ class AuthService extends GetxService {
 
   Future<void> loginWithUserData(User user) async {
     final db = await DatabaseService.database;
-    await db.insert('users', user.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert(
+      'users',
+      user.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     _currentUser.value = user;
     _isLoggedIn.value = true;
   }
@@ -32,7 +36,7 @@ class AuthService extends GetxService {
   Future<User?> getStoredUser() async {
     final db = await DatabaseService.database;
     final users = await db.query('users', limit: 1);
-    
+
     if (users.isNotEmpty) {
       final user = User.fromJson(users.first);
       _currentUser.value = user;
